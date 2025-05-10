@@ -1,3 +1,39 @@
 theme: jekyll-theme-minimal
-title: Vova's Blog Homepage
-description: Bookmark this to keep an eye on my project updates!
+title: Vova's Blog Homepage # You can update this
+description: Bookmark this to keep an eye on my project updates! # You can update this
+
+# Basic GitHub Pages settings
+baseurl: "" # For user/organization pages like erv4gen.github.io
+url: "https://erv4gen.github.io" # Your site's full URL
+
+# Build settings
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge # Optional: for code highlighting
+
+# Plugins (GitHub Pages has a specific list of supported plugins)
+# If you add plugins not on the list, you might need a GitHub Action to build.
+# For now, jekyll-theme-minimal handles basic needs.
+# plugins:
+#   - jekyll-feed # For RSS feed, supported by GitHub Pages
+
+# Exclude from processing.
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+  - analyze_wordpress_xml.py
+  - migrate_wp_to_jekyll.py
+  - .clinerules
+  - .eleventy.js # If not deleted
+  - package.json # If not deleted
+  - _src # If not deleted
+  - _jekyll_export # If not deleted
+  - uploads.zip # Exclude the zip file itself
