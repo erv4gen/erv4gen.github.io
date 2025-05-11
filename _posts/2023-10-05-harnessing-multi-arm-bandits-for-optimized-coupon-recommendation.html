@@ -1,0 +1,394 @@
+---
+layout: post
+title: Multi-Arm Bandits for Recommendation Systems
+date: 2023-10-05 14:12:50.000000000 +00:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Data Science
+tags: []
+meta:
+  _us_jsoncss_data: ''
+  _us_in_content_ids: ''
+  us_og_image: ''
+  _us_grid_filter_atts: ''
+  _oembed_634d4c926b472ba31bdf37e2e2abf28b: "{{unknown}}"
+  _edit_last: '1'
+  _wp_page_template: default
+  _wp_old_date: '2023-11-22'
+  _thumbnail_id: '9066'
+  footnotes: ''
+  us_header_id: __defaults__
+  us_header_sticky_override: ''
+  us_header_sticky: ''
+  us_header_transparent_override: ''
+  us_header_transparent: ''
+  us_header_shadow: ''
+  us_header_sticky_pos: ''
+  us_content_id: __defaults__
+  us_footer_id: __defaults__
+  us_tile_additional_image: ''
+  us_tile_link: '{"url":"","target":""}'
+  us_tile_icon: ''
+  us_tile_size: 1x1
+  us_tile_bg_color: ''
+  us_tile_text_color: ''
+  us_meta_title: ''
+  us_meta_description: ''
+  us_meta_robots: ''
+  _last_editor_used_jetpack: block-editor
+  _oembed_714cf3ba334e178bb6f32ea2cd84721f: "{{unknown}}"
+  _oembed_026afd8ba0561d561afa512c57aca224: "{{unknown}}"
+  _oembed_255ee5649bb9e0e28dd82bdaacf65660: "{{unknown}}"
+author:
+  login: Vladimir
+  email: eremin.vladimir.d@gmail.com
+  display_name: Vladimir
+  first_name: ''
+  last_name: ''
+permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
+---
+<p><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><br />
+<!-- wp:shortcode --><html><body></p>
+<p>[mathjax]<br />
+<!-- /wp:shortcode --></p>
+<p><!-- wp:paragraph --></p>
+<p>Envision yourself as a store owner looking to boost foot traffic. You hatch a plan: stand at the front and actively promote your items to those walking by. With enthusiasm, you quickly wear a striking outfit and hold up a blank board, ready to publicize a special deal. However, when it's time to pen the actual offer, you're stumped. A "10% discount on everything" could work, but you're torn between it being too small to matter or too large to remain profitable. A flat "$2 off your initial buy" crosses your mind, but could this be overly generous for just any passerby? Then the idea of "Free gift with every purchase" springs forth. It's intriguing, but will it genuinely enhance the day's revenue?</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>You quickly realize that what you truly need is some sort of method, capable of predicting the most appealing offer for each potential customer.<br>Welcome to the intricate and intriguing realm of recommendation systems, where algorithms help to match the right offer to the right customer, improving your chances of conversion and sales.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading {"level":3} --></p>
+<h3 class="wp-block-heading">Recommendation systems is all about data</h3>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>When we talk about recommendation systems, we talk big data! Abundance of data ensures a higher level of confidence about user preferences. In contrast, when there is limited data, there is a lack of certainty about what users might prefer. However, even in the face of such uncertainty, recommenders tend to prioritize and suggest items that have received a higher level of engagement previously.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For instance, with collaborative filtering, a most popular method typically used by recommender systems, users are matched based on their past behaviors or ratings. A user may be recommended a movie that other similar users have enjoyed.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image --></p>
+<figure class="wp-block-image"><img src="{{site.baseurl}}/assets/2023/10/multi-armed_bandits_1.jpg" alt=""></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Meanwhile, item-based similarity approaches would recommend items that are similar to ones the user has previously interacted with or rated highly. For instance, if a user liked a certain science fiction book, they would be recommended other books in the same genre or by the same author.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>However, these methods can contribute to a <strong>feedback loop</strong>, where items that aren't initially recommended continue to receive low to no engagement. This results in a cycle where those items that were initially popular and recommended continue to get promoted, while potentially relevant items get ignored. This might lead to the problem of overfitting, where only a limited set of items get recommended over and over, while a large variety of other potentially interesting items are not discovered or recommended. As a result, the system fails to explore the breadth of user preferences, limiting the overall user experience.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Mastering Multi-Arm Bandits</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>There are several approaches that can solve this type of overfitting, the Multi-Arm Bandits is one of the most powerful and commonly used ones. Bandit algorithms propose a solution to this feedback-loop problem by modeling uncertainty and intentionally exploring to minimize it. This strategy embodies the concept of '<em>exploration vs exploitation</em>', where '<em>exploitation</em>' is using the knowledge we already have to recommend the most engaging items, while '<em>exploration</em>' involves suggesting less-known items to gather more information about user preferences.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>By acknowledging the inherent uncertainty in the data, bandits actively engage in exploration to reduce it, thereby learning about the potential relevance of previously unexplored or underexplored items. For instance, instead of continually recommending the best-performing item (a best-selling menu item, for example), a bandit algorithm might occasionally recommend a less popular item (perhaps a new item or previously unpopular). This explorative approach provides an opportunity to discover whether users might like this less-known item, thereby expanding the scope of recommendations.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Moreover, bandits incorporate a system of rewards, where a successful recommendation (like a user clicking on a recommended item) garners a '<strong>reward</strong>'. Over time, these rewards inform the algorithm about the likelihood of different items being appreciated by different users, further refining the recommendation process. This harmonious blend of uncertainty, exploration, and learning makes bandit algorithms a compelling approach to mitigating the issues prevalent in the realm of recommendation systems.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Reward is usually denoted as $latex R_t $</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:quote --></p>
+<blockquote class="wp-block-quote"><p>
+<!-- wp:paragraph --></p>
+<p>Every time an action is taken a reward is obtained. Each time an action is taken the reward returned can have a different value.</p>
+<p><!-- /wp:paragraph -->
+</p></blockquote>
+<p><!-- /wp:quote --></p>
+<p><!-- wp:paragraph --></p>
+<p>Below is few more definition that are used to define the Bandit model:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>The number of available actions is denoted by the letter $latex k$</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>
+<strong>Action</strong>: the action taken at time-step $latex t$ is denoted as $latex A_t$</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Each of the available $latex k$ actions has an <strong>expected reward: Q(a):</strong><br>$$Q(a) = E[R_t | A_t = a]$$</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>The most simple example of the reward function is a Sample Average Estimates:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$Q_{t+1}(a) = \frac{1}{n} \sum_{i=1}^{n} R_i$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Choosing The Right Bandit</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Choosing different design of the reward function yield different types of Bandits.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In the following sections, we will touch upon three fundamental bandit algorithms: epsilon-greedy, Upper Confidence Bound (UCB), and Thomson Sampling.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol>
+<!-- wp:list-item --></p>
+<li>
+<strong>Epsilon-Greedy</strong>: This algorithm operates by using a probability $latex ε$ to determine if it will explore or exploit. So, the reward function could be represented like:</li>
+<p><!-- /wp:list-item -->
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$R_t = \begin{cases} \text{argmax}_{a} Q_t(a), &amp; \text{with probability } 1 - ε \\ \text{a random action}, &amp; \text{with probability } ε \end{cases}$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Where</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>$latex R_t$ represents the chosen action at time $latex t$,</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>$latex Q_t(a)$ is the estimated value of action $latex a$ at time $latex t$, and</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>$latex ε$ is the probability of choosing to explore rather than exploit.</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol>
+<!-- wp:list-item --></p>
+<li>
+<strong>Upper Confidence Bound (UCB)</strong>: The UCB algorithm adds a confidence interval to the estimated reward for each action. The action chosen is the one with the highest upper confidence bound. This could be represented like:</li>
+<p><!-- /wp:list-item -->
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$A_t = \text{argmax}_{a} \left[ Q_t(a) + c \sqrt{\frac{\ln t}{N_t(a)}} \right]$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Where $latex A_t$ is the action chosen at time $latex t$, $latex Q_t(a)$ is the estimated value of action $latex a$ at time $latex t$, $latex c$ is a constant determining the level of exploration, $latex N_t(a)$ is the number of times action $latex a$ has been chosen up to time $latex t$, and $latex l_n$ is the natural logarithm.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list {"ordered":true} --></p>
+<ol>
+<!-- wp:list-item --></p>
+<li>Thomson Sampling.</li>
+<p><!-- /wp:list-item -->
+</ol>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this algorithm, an action is chosen based on the highest sample from each action's reward distribution. This could be represented like:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$A_t = \text{argmax}_{a} \left[ \text{Sample from } β(R_{1:t-1}(a), T_{1:t-1}(a)) \right]$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Where $latex A_t$ is the action chosen at time $latex t$, $latex β$ represents a Beta distribution (commonly used in Thompson Sampling when rewards are binary), $latex R_{1:t-1}(a)$ is the sum of rewards for action $latex a$ up to time $latex t-1$, and $latex T_{1:t-1}(a)$ is the total number of times action $latex a$ has been chosen up to time $latex t-1$.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Our primary focus will be on Thomson Sampling, as it frequently surpasses both epsilon-greedy and UCB algorithms in performance. For readers interested in delving deeper into each algorithm and exploring a comprehensive comparison between them, we've included pertinent links in the reference section.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Data For Bandits</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>Returning to our shopkeeper scenario, after acquiring a solid understanding of multi-arm bandits and different reward functions, our shopkeeper resolves to employ the Thompson Sampling technique to identify the optimal offer for each of his patrons. His store, being somewhat removed from the bustling main street, sees a regular flow of three individuals passing by daily - we'll denote these as Person $latex P_1$, $latex P_2$, and $latex P_3$.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>For each individual $latex P_i$ (where $latex i$ ranges from 1 to 3), there are five potential offers (or actions) that the shopkeeper could extend, denoted as $latex a_1, a_2, \ldots, a_5$. Notably, he also posits that not all individuals may necessarily need an offer to visit the store. To verify this hypothesis, he decides to occasionally abstain from extending any offers at all, thereby establishing a control observation for his experiment.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>With each passing day, the shopkeeper observes the interactions of each individual with the varying offers (including the no-offer scenario), aiming to discern the optimal action $latex A_i$ for each person $latex i$. This optimal action would not only encourage a higher frequency of store visits (improving conversion rates), but also exhibit an uplift over the control scenario of no offers. In doing so, the shopkeeper can ensure his marketing campaign is cost-efficient, only extending offers when they demonstrably enhance store visitation.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Defining The Learner</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>With a clear strategy in mind, the shopkeeper set forth on a two-month experiment. Each day, he displayed a distinct offer (or no offer at all) to each of the three individuals, and meticulously recorded the outcome or "reward" ($latex R$) as either a conversion (1) or non-conversion (0):</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$R_{t,i,a} =<br>\begin{cases}<br>1 &amp; \text{if conversion} \\<br>0 &amp; \text{if non-conversion}<br>\end{cases}$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In this formula, $latex t$ denotes the time step or day index, $latex i$ signifies the person, and $latex a$ indicates the offer index.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The shopkeeper then updated the parameters of the Beta distribution for each person's offer preference using the following rules:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>$latex \alpha_{t,i,a} := \alpha_{t-1,i,a} + R_{t,i,a}$ (representing the number of successes)</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>$latex \beta_{t,i,a} := \beta_{t-1,i,a} + (1 - R_{t,i,a})$ (representing the number of failures)</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here, $latex \alpha_{t,i,a}$ and $latex \beta_{t,i,a}$ denote the parameters of the Beta distribution for person $latex i$, action $latex a$ at time step $latex t$.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>These updates provided the shopkeeper an estimated conversion probability $latex P_{i}(X|a)$ for each individual and offer. This probability followed a Beta distribution:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$P_{i}(X|a) \sim \text{Beta}(\alpha_{t,i,a},\beta_{t,i,a})$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, to decide which offer to show next, the shopkeeper chose the action $a$ that yielded the maximum expected reward. He used the following strategy to select the action:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>$$A_{t+1,i} = \text{argmax}_{a} \left[ \text{Sample from } \text{Beta}(\alpha_{t,i,a}, \beta_{t,i,a}) \right]$$</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Running the Model</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>After two months of diligent experimentation, the shopkeeper had amassed a rich collection of data for each passerby, shedding light on their distinct preferences. The shopkeeper meticulously recorded a sequence of observations:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:table --></p>
+<figure class="wp-block-table">
+<table>
+<thead>
+<tr>
+<th> </th>
+<th> </th>
+<th> </th>
+<th> </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>customer_id</td>
+<td>day_index</td>
+<td>offer_index</td>
+<td>success</td>
+</tr>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</figure>
+<p><!-- /wp:table --></p>
+<p><!-- wp:paragraph --></p>
+<p>This table delineates the data he recorded. The <code>day_index</code> column begins from 0, representing the first day of the experiment. The <code>customer_id</code> could be either 0, 1, or 2, indicating the individual to whom an offer was presented. The <code>offer_index</code> reflects the specific offer shown - ranging from 1 to 5, with '-1' indicating a control experiment where no offer was presented. Finally, the <code>success</code> column is a binary marker showing whether the individual visited the shop after seeing the offer, with '1' indicating a visit and '0' representing no visit.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Armed with this data, the shopkeeper dusted off his seldom-used laptop and entered these records into a Jupyter Notebook to analyze and visualize the results. His analysis culminated in a series of animated plots demonstrating the convergence of the Beta distribution for each individual over time.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"align":"center","id":9471,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image aligncenter size-full"><img src="{{site.baseurl}}/assets/2023/10/Multi-armed-bandits-results-1.gif" alt="" class="wp-image-9471"></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:image {"sizeSlug":"large"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.baseurl}}/assets/2023/10/Multi-armed-bandits-results-1.gif" alt=""></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>For the first customer, the plot reveals a surprising trend. This customer demonstrated the largest response in the control observations, suggesting that the mere presentation of an offer discouraged them from entering the store. In marketing terminology, this segment of customers is known as 'sleeping dogs,' who are best left undisturbed.</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"sizeSlug":"large"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.baseurl}}/assets/2023/10/Multi-armed-bandits-results-2-1.gif" alt=""></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>In stark contrast, the second customer showed a strong preference for a specific offer. The offer $latex a^{(1)}$ yielded a clear uplift in store visits compared to other offers and the control group. This data suggests that the individual was persuadable and therefore worth the investment in marketing efforts.</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:image {"sizeSlug":"large"} --></p>
+<figure class="wp-block-image size-large"><img src="{{site.baseurl}}/assets/2023/10/Multi-armed-bandits-results-2-1.gif" alt=""></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>The third customer, however, painted a completely different picture. The response rate was uniform across all offers, including the control group. This was a clear indication that regardless of the marketing efforts or offers, this individual's decision to visit the store remained unchanged. As such, including this individual in the target audience would not result in incremental net sales and would be an inefficient use of resources</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">Conclusion</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:paragraph --></p>
+<p>In conclusion, the shopkeeper's innovative application of Thompson Sampling provided him with invaluable insights. It empowered him to tailor his marketing strategy for each individual customer, enhancing efficiency and cost-effectiveness.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>By mapping customer responses to offers, he could discern the impact of different marketing efforts. This data-driven approach enabled more effective customer segmentation. Instead of a one-size-fits-all strategy, he could now tailor offers based on individual preferences, optimizing the value of his marketing budget.<br>Moreover, he could identify customers who remained unaffected by offers, thereby avoiding unnecessary marketing expenditure. On the flip side, he recognized customers who would purchase irrespective of promotions, saving resources on unneeded incentives.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>In essence, the shopkeeper's strategic use of Thompson Sampling refined his marketing from broad-strokes to precision-guided. This case underscores the potential of machine learning algorithms in enhancing marketing effectiveness and customer segmentation while ensuring optimal return on marketing investment.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:heading --></p>
+<h2 class="wp-block-heading">References</h2>
+<p><!-- /wp:heading --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>“How to Build and Evaluate a Next Best Action Model,” Grid Dynamics Blog, July 29, 2021, <a href="https://blog.griddynamics.com/next-best-action-churn-prevention/">https://blog.griddynamics.com/next-best-action-churn-prevention/</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Prince Grover, “Various Implementations of Collaborative Filtering,” Medium, March 31, 2020, <a href="https://towardsdatascience.com/various-implementations-of-collaborative-filtering-100385c6dfe0">https://towardsdatascience.com/various-implementations-of-collaborative-filtering-100385c6dfe0</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Guilherme Duarte Marmerola, “Thompson Sampling for Contextual Bandits,” Guilherme’s Blog, November 28, 2017, <a href="https://gdmarmerola.github.io//ts-for-contextual-bandits/">https://gdmarmerola.github.io//ts-for-contextual-bandits/</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>James McInerney et al., “Explore, Exploit, and Explain: Personalizing Explainable Recommendations with Bandits,” in Proceedings of the 12th ACM Conference on Recommender Systems, RecSys ’18 (New York, NY, USA: Association for Computing Machinery, 2018), 31–39, <a href="https://doi.org/10.1145/3240323.3240354">https://doi.org/10.1145/3240323.3240354</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Eugene Yan, “Bandits for Recommender Systems,” eugeneyan.com, May 8, 2022, <a href="https://eugeneyan.com/writing/bandits/">https://eugeneyan.com/writing/bandits/</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Steve Roberts, “Multi-Armed Bandits: Part 1,” Medium, December 10, 2020, <a href="https://towardsdatascience.com/multi-armed-bandits-part-1-b8d33ab80697">https://towardsdatascience.com/multi-armed-bandits-part-1-b8d33ab80697</a>.</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>“Beta Distribution,” in Wikipedia, July 27, 2023, <a href="https://en.wikipedia.org/w/index.php?title=Beta_distribution&amp;oldid=1167451431">https://en.wikipedia.org/w/index.php?title=Beta_distribution&amp;oldid=1167451431</a>.</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Originally published on <a href="https://blog.griddynamics.com/multi-armed-bandit-recommendations-system/">Grid Dynamics Blog</a></p>
+<p><!-- /wp:paragraph --><br />
+</body></html></p>

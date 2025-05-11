@@ -1,0 +1,15 @@
+docs/memory-bank
+_site/
+.clinerules
+migration/
+
+# macOS
+.DS_Store
+
+# Eleventy specific (not used)
+.eleventy.js
+_src/
+
+# Editor/Tool specific
+.ruby-lsp/
+.sass-cache/

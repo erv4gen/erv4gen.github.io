@@ -1,0 +1,20 @@
+{
+	"name": "VEREMIN",
+	"build": {
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	},
+	// Runs commands after the container is created.
+	"postCreateCommand": "bundle install && chmod +x server.sh",
+	"customizations": {
+		"vscode": {
+			"settings": {},
+			"extensions": [
+				"ms-toolsai.jupyter",
+				"ms-toolsai.datawrangler",
+				"grapecity.gc-excelviewer",
+				"saoudrizwan.claude-dev"
+			]
+		}
+	}
+}

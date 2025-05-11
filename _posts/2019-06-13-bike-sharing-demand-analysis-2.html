@@ -1,0 +1,1830 @@
+---
+layout: post
+title: Bike Sharing Demand Analysis
+date: 2019-06-13 12:08:39.000000000 +00:00
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+categories:
+- Data Science
+tags: []
+meta:
+  _us_jsoncss_data: ''
+  _us_in_content_ids: ''
+  us_og_image: ''
+  _us_grid_filter_atts: ''
+  _edit_last: '1'
+  _wp_page_template: default
+  _wp_old_date: '2023-11-22'
+  _thumbnail_id: '9126'
+  us_header_id: __defaults__
+  us_header_sticky_override: ''
+  us_header_sticky: ''
+  us_header_transparent_override: ''
+  us_header_transparent: ''
+  us_header_shadow: ''
+  us_header_sticky_pos: ''
+  us_content_id: __defaults__
+  us_footer_id: __defaults__
+  us_tile_additional_image: ''
+  us_tile_link: '{"url":"","target":""}'
+  us_tile_icon: ''
+  us_tile_size: 1x1
+  us_tile_bg_color: ''
+  us_tile_text_color: ''
+  us_meta_title: ''
+  us_meta_description: ''
+  us_meta_robots: ''
+author:
+  login: Vladimir
+  email: eremin.vladimir.d@gmail.com
+  display_name: Vladimir
+  first_name: ''
+  last_name: ''
+permalink: "/bike-sharing-demand-analysis-2/"
+---
+<p><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><br />
+<!-- wp:paragraph --><html><body></p>
+<p>Description: Kaggle playground competition</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-outputWrapper">
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre><span style="background-color: var(--wp--preset--color--background); color: var(--wp--preset--color--foreground); font-family: var(--wp--preset--font-family--system-font); font-size: var(--wp--preset--font-size--medium);">In [ ]:</span></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">gc</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">LabelEncoder</span><span class="p">,</span> <span class="n">OneHotEncoder</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="c1">#from scipy.sparse import vstack, csr_matrix, save_npz, load_npz</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s2">"ticks"</span><span class="p">,</span> <span class="n">color_codes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">XGBoost.XGBoostOptimizer</span> <span class="kn">import</span> <span class="n">XGBoostOptimizer</span>
+<span class="kn">from</span> <span class="nn">DataProcessing</span> <span class="kn">import</span> <span class="n">DataStats</span>
+
+
+<span class="n">dtypes</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'datetime'</span><span class="p">:</span> <span class="s1">'O'</span><span class="p">,</span>
+             <span class="s1">'season'</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+             <span class="s1">'holiday'</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+             <span class="s1">'workingday'</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+             <span class="s1">'weather'</span><span class="p">:</span> <span class="s1">'category'</span><span class="p">,</span>
+             <span class="s1">'temp'</span><span class="p">:</span> <span class="s1">'float64'</span><span class="p">,</span>
+             <span class="s1">'atemp'</span><span class="p">:</span> <span class="s1">'float64'</span><span class="p">,</span>
+             <span class="s1">'humidity'</span><span class="p">:</span> <span class="s1">'int64'</span><span class="p">,</span>
+             <span class="s1">'windspeed'</span><span class="p">:</span> <span class="s1">'float64'</span><span class="p">,</span>
+             <span class="s1">'casual'</span><span class="p">:</span> <span class="s1">'int64'</span><span class="p">,</span>
+             <span class="s1">'registered'</span><span class="p">:</span> <span class="s1">'int64'</span><span class="p">,</span>
+             <span class="s1">'count'</span><span class="p">:</span> <span class="s1">'int64'</span><span class="p">}</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">'ggplot'</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">'ignore'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'/home/vlad/csv/Social/Bike-sharing-demand/train.csv'</span>
+                      <span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">dtypes</span><span class="p">,</span><span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s1">'datetime'</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Df size: '</span><span class="p">,</span><span class="n">traindf</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Mem used: '</span><span class="p">,</span><span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">traindf</span><span class="o">.</span><span class="n">memory_usage</span><span class="p">()</span><span class="o">/</span><span class="mi">1024</span><span class="o">/</span><span class="mi">1024</span><span class="p">),</span><span class="mi">2</span><span class="p">),</span><span class="s1">'Mb'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>Df size:  (10886, 12) 
+Mem used:  0.71 Mb
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/html">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {<br />
+        vertical-align: middle;<br />
+    }</p>
+<p>    .dataframe tbody tr th {<br />
+        vertical-align: top;<br />
+    }</p>
+<p>    .dataframe thead th {<br />
+        text-align: right;<br />
+    }<br />
+</style>
+<table class="dataframe" border="1">
+<thead>
+<tr style="text-align: right;">
+<th> </th>
+<th>datetime</th>
+<th>season</th>
+<th>holiday</th>
+<th>workingday</th>
+<th>weather</th>
+<th>temp</th>
+<th>atemp</th>
+<th>humidity</th>
+<th>windspeed</th>
+<th>casual</th>
+<th>registered</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>2011-01-01 00:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>81</td>
+<td>0.0</td>
+<td>3</td>
+<td>13</td>
+<td>16</td>
+</tr>
+<tr>
+<th>1</th>
+<td>2011-01-01 01:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.02</td>
+<td>13.635</td>
+<td>80</td>
+<td>0.0</td>
+<td>8</td>
+<td>32</td>
+<td>40</td>
+</tr>
+<tr>
+<th>2</th>
+<td>2011-01-01 02:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.02</td>
+<td>13.635</td>
+<td>80</td>
+<td>0.0</td>
+<td>5</td>
+<td>27</td>
+<td>32</td>
+</tr>
+<tr>
+<th>3</th>
+<td>2011-01-01 03:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>75</td>
+<td>0.0</td>
+<td>3</td>
+<td>10</td>
+<td>13</td>
+</tr>
+<tr>
+<th>4</th>
+<td>2011-01-01 04:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>75</td>
+<td>0.0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">DataStats</span><span class="o">.</span><span class="n">get_df_stats</span><span class="p">(</span><span class="n">traindf</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/html">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {<br />
+        vertical-align: middle;<br />
+    }</p>
+<p>    .dataframe tbody tr th {<br />
+        vertical-align: top;<br />
+    }</p>
+<p>    .dataframe thead th {<br />
+        text-align: right;<br />
+    }<br />
+</style>
+<table class="dataframe" border="1">
+<thead>
+<tr style="text-align: right;">
+<th> </th>
+<th>Feature</th>
+<th>Unique_values</th>
+<th>Percentage of missing values</th>
+<th>Percentage of values in the biggest category</th>
+<th>dtype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>datetime</td>
+<td>10886</td>
+<td>0.0</td>
+<td>0.009186</td>
+<td>datetime64[ns]</td>
+</tr>
+<tr>
+<th>1</th>
+<td>season</td>
+<td>4</td>
+<td>0.0</td>
+<td>25.114826</td>
+<td>category</td>
+</tr>
+<tr>
+<th>2</th>
+<td>holiday</td>
+<td>2</td>
+<td>0.0</td>
+<td>97.143120</td>
+<td>category</td>
+</tr>
+<tr>
+<th>3</th>
+<td>workingday</td>
+<td>2</td>
+<td>0.0</td>
+<td>68.087452</td>
+<td>category</td>
+</tr>
+<tr>
+<th>4</th>
+<td>weather</td>
+<td>4</td>
+<td>0.0</td>
+<td>66.066507</td>
+<td>category</td>
+</tr>
+<tr>
+<th>5</th>
+<td>temp</td>
+<td>49</td>
+<td>0.0</td>
+<td>4.289914</td>
+<td>float64</td>
+</tr>
+<tr>
+<th>6</th>
+<td>atemp</td>
+<td>60</td>
+<td>0.0</td>
+<td>6.163880</td>
+<td>float64</td>
+</tr>
+<tr>
+<th>7</th>
+<td>humidity</td>
+<td>89</td>
+<td>0.0</td>
+<td>3.380489</td>
+<td>int64</td>
+</tr>
+<tr>
+<th>8</th>
+<td>windspeed</td>
+<td>28</td>
+<td>0.0</td>
+<td>12.061363</td>
+<td>float64</td>
+</tr>
+<tr>
+<th>9</th>
+<td>casual</td>
+<td>309</td>
+<td>0.0</td>
+<td>9.057505</td>
+<td>int64</td>
+</tr>
+<tr>
+<th>10</th>
+<td>registered</td>
+<td>731</td>
+<td>0.0</td>
+<td>1.791292</td>
+<td>int64</td>
+</tr>
+<tr>
+<th>11</th>
+<td>count</td>
+<td>822</td>
+<td>0.0</td>
+<td>1.552453</td>
+<td>int64</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/html">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {<br />
+        vertical-align: middle;<br />
+    }</p>
+<p>    .dataframe tbody tr th {<br />
+        vertical-align: top;<br />
+    }</p>
+<p>    .dataframe thead th {<br />
+        text-align: right;<br />
+    }<br />
+</style>
+<table class="dataframe" border="1">
+<thead>
+<tr style="text-align: right;">
+<th> </th>
+<th>temp</th>
+<th>atemp</th>
+<th>humidity</th>
+<th>windspeed</th>
+<th>casual</th>
+<th>registered</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>count</th>
+<td>10886.00000</td>
+<td>10886.000000</td>
+<td>10886.000000</td>
+<td>10886.000000</td>
+<td>10886.000000</td>
+<td>10886.000000</td>
+<td>10886.000000</td>
+</tr>
+<tr>
+<th>mean</th>
+<td>20.23086</td>
+<td>23.655084</td>
+<td>61.886460</td>
+<td>12.799395</td>
+<td>36.021955</td>
+<td>155.552177</td>
+<td>191.574132</td>
+</tr>
+<tr>
+<th>std</th>
+<td>7.79159</td>
+<td>8.474601</td>
+<td>19.245033</td>
+<td>8.164537</td>
+<td>49.960477</td>
+<td>151.039033</td>
+<td>181.144454</td>
+</tr>
+<tr>
+<th>min</th>
+<td>0.82000</td>
+<td>0.760000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>0.000000</td>
+<td>1.000000</td>
+</tr>
+<tr>
+<th>25%</th>
+<td>13.94000</td>
+<td>16.665000</td>
+<td>47.000000</td>
+<td>7.001500</td>
+<td>4.000000</td>
+<td>36.000000</td>
+<td>42.000000</td>
+</tr>
+<tr>
+<th>50%</th>
+<td>20.50000</td>
+<td>24.240000</td>
+<td>62.000000</td>
+<td>12.998000</td>
+<td>17.000000</td>
+<td>118.000000</td>
+<td>145.000000</td>
+</tr>
+<tr>
+<th>75%</th>
+<td>26.24000</td>
+<td>31.060000</td>
+<td>77.000000</td>
+<td>16.997900</td>
+<td>49.000000</td>
+<td>222.000000</td>
+<td>284.000000</td>
+</tr>
+<tr>
+<th>max</th>
+<td>41.00000</td>
+<td>45.455000</td>
+<td>100.000000</td>
+<td>56.996900</td>
+<td>367.000000</td>
+<td>886.000000</td>
+<td>977.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Define a null model - mean count value</span>
+<span class="n">null_pred</span> <span class="o">=</span> <span class="n">traindf</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="s1">'mean'</span><span class="p">,</span><span class="s1">'count'</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'MAE for Null model: '</span><span class="p">,</span><span class="nb">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]</span> <span class="o">-</span> <span class="n">null_pred</span><span class="p">)),</span><span class="mi">2</span><span class="p">))</span>
+
+
+<span class="c1">#traindf['season',	'holiday',	'workingday'	'weather'	'temp'	'atemp'	'humidity'	'windspeed']</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>MAE for Null model:  142.71
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Seasonality  exploring</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">traindf</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s1">'season'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s2">"weather"</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"Set1"</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">,</span> <span class="n">hist</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">rug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">set_ylabels</span><span class="p">(</span><span class="s1">'density'</span><span class="p">))</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/Tuzs7MpKytrxXclItI+KXNFRBJHmSsikjjKXJEDi7utCxD5qbBtm8mTJ1NcXMwVV1yBZVkMHjyYMWPGUF1dzW233UY4HObwww9n7NixAPj9fsaNG8f06dNxHIfhw4eTl5e3179zxIgRFBcX89RTT3HuuecyfPjw1np7IiLtijJXRCRxlLkiIomjzBU5sFjGGNPWRYiIiIiIiIiIiIiIHEg0rY2IiIiIiIiIiIiISIKpc15EREREREREREREJMHUOS8iIiIiIiIiIiIikmDqnBcRERERERERERERSTB1zouIiIiIiIiIiIiIJJg650VEREREREREREREEkyd8yIiIiIiIiIiIiIiCabOeRERERERERERERGRBPtfkF4DlMaAwPIAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Seasonality  exploring</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">traindf</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s1">'season'</span><span class="c1">#, hue="weather"</span>
+                  <span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"Set1"</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">,</span><span class="s2">"weather"</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s2">"Blues_d"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">set_ylabels</span><span class="p">(</span><span class="s1">'mean count'</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Average Count by Season and Waether'</span><span class="p">)</span> <span class="c1"># can also get the figure from plt.gcf()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>Text(0.5,0.98,'Average Count by Season and Waether')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/7pPB0dHXn22Wdz66235tChQ5k4cWIuvfTSoTsAgBJoLUA59BZg6GktFNc08H9P3wkAAAAAACVwKQ8AAAAAAEplMQ0AAAAAQKkspgEAAAAAKJXFNAAAAAAApbKYBgAAAACgVBbTAAAAAACUymIaAAAAAIBSWUwDAAAAAFAqi2kAAAAAAEr1bysBnYlNDLjuAAAAAElFTkSuQmCC" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Tota count by season</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,))</span>
+<span class="n">traindf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'season'</span><span class="p">)[</span><span class="s1">'count'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">())</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'total count'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Total Count by Season'</span><span class="p">)</span>
+<span class="c1">#.loc[(traindf.weather=='4') &amp;(traindf.season=='1')]['count'].mean()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>Text(0.5,1,'Total Count by Season')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/T9uWInl6qSA0gAAAABJRU5ErkJggg==" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Holiday  exploring</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">traindf</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s1">'season'</span><span class="c1">#, hue="weather"</span>
+                  <span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"Set1"</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">,</span><span class="s2">"holiday"</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s2">"Blues_d"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">set_ylabels</span><span class="p">(</span><span class="s1">'mean count'</span><span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Average Count by Season and Holiday'</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'</span><span class="se">\n\n\n</span><span class="s1">'</span><span class="p">)</span>
+<span class="c1">#Holiday  exploring</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">traindf</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s1">'season'</span><span class="c1">#, hue="weather"</span>
+                  <span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="s2">"Set1"</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">g</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">,</span><span class="s2">"workingday"</span><span class="p">,</span> <span class="s2">"count"</span><span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s2">"Blues_d"</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add_legend</span><span class="p">()</span>
+    <span class="o">.</span><span class="n">set_ylabels</span><span class="p">(</span><span class="s1">'mean count'</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Average Count by Workingday and Holiday'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre></pre>
+</div>
+</div>
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>Text(0.5,0.98,'Average Count by Workingday and Holiday')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/fffzz333FPuUQCqmt4CFE9rAYqntSwmNqahQh09ejQ7d+5MY2NjOjs7yz0OQNXSW4DiaS1A8bSWxcZHeQAAAAAAUFLumAYAAAAAoKRsTAMAAAAAUFI2pgEAAAAAKCkb0wAAAAAAlJSNaQAAAAAASsrGNAAAAAAAJfVv83kq53r68YMAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/++kmDXqzS1oAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf_numerical</span> <span class="o">=</span> <span class="n">traindf</span><span class="p">[[</span><span class="s1">'humidity'</span><span class="p">,</span><span class="s1">'windspeed'</span><span class="p">,</span><span class="s1">'temp'</span><span class="p">,</span><span class="s1">'count'</span><span class="p">]]</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">pairplot</span><span class="p">(</span><span class="n">traindf_numerical</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span>
+                 <span class="p">,</span><span class="n">y_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">'count'</span><span class="p">],</span> <span class="n">x_vars</span><span class="o">=</span><span class="p">[</span><span class="s1">'humidity'</span><span class="p">,</span><span class="s1">'windspeed'</span><span class="p">,</span><span class="s1">'temp'</span><span class="p">]</span>
+                 <span class="p">,</span><span class="n">kind</span><span class="o">=</span><span class="s2">"reg"</span>
+                <span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span>
+                <span class="p">,</span><span class="n">palette</span><span class="o">=</span><span class="s2">"Blues_d"</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span>
+<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">'Continues Variables vs. Count'</span><span class="p">);</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/SpIS6yO6FUAAAAABJRU5ErkJggg==" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">corr</span> <span class="o">=</span> <span class="n">traindf_numerical</span><span class="o">.</span><span class="n">corr</span><span class="p">();</span> <span class="n">corr</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/html">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {<br />
+        vertical-align: middle;<br />
+    }</p>
+<p>    .dataframe tbody tr th {<br />
+        vertical-align: top;<br />
+    }</p>
+<p>    .dataframe thead th {<br />
+        text-align: right;<br />
+    }<br />
+</style>
+<table class="dataframe" border="1">
+<thead>
+<tr style="text-align: right;">
+<th> </th>
+<th>humidity</th>
+<th>windspeed</th>
+<th>temp</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>humidity</th>
+<td>1.000000</td>
+<td>-0.318607</td>
+<td>-0.064949</td>
+<td>-0.317371</td>
+</tr>
+<tr>
+<th>windspeed</th>
+<td>-0.318607</td>
+<td>1.000000</td>
+<td>-0.017852</td>
+<td>0.101369</td>
+</tr>
+<tr>
+<th>temp</th>
+<td>-0.064949</td>
+<td>-0.017852</td>
+<td>1.000000</td>
+<td>0.394454</td>
+</tr>
+<tr>
+<th>count</th>
+<td>-0.317371</td>
+<td>0.101369</td>
+<td>0.394454</td>
+<td>1.000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> 
+            <span class="n">xticklabels</span><span class="o">=</span><span class="n">corr</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">,</span>
+            <span class="n">yticklabels</span><span class="o">=</span><span class="n">corr</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+<span class="c1">#plt.subplots_adjust(top=0.9)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Corelation Matrix'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>Text(0.5,1,'Corelation Matrix')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/8Bvbt1wwSkJOkAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Outlier analysis</span>
+<span class="n">fig</span> <span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traindf</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s2">"count"</span><span class="p">,</span><span class="n">orient</span><span class="o">=</span><span class="s2">"v"</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+           <span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">traindf</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="s1">'count'</span><span class="p">,</span><span class="n">x</span><span class="o">=</span><span class="s1">'workingday'</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'Box Plot on Responce Variable'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'Box Plot on RV by Day Type'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>[Text(0.5,1,'Box Plot on RV by Day Type')]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/fv17PPPquGDRvqtttuc0Gl8DUc4gIAAABYCJ+pAAAAABZCQAcAAAAshIAOAAAAWAgBHQAAALAQAjoAAABgIQR0AAAAwEL+H8HspJq2drjGAAAAAElFTkSuQmCC" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s2">"count"</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s2">"count"</span><span class="p">],</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'Responce Variable Distribution'</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">'Probability'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'QQ Plot on Variable Distribution'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>[Text(0.5,1,'QQ Plot on Variable Distribution')]</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/wivvBrjtehIAAAAAElFTkSuQmCC" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#Feature Engineering</span>
+
+<span class="c1">#create a feature "TimeCat" -{0-3}</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">mktime</span>
+<span class="kn">import</span> <span class="nn">datetime</span> <span class="k">as</span> <span class="nn">dt</span>
+
+<span class="k">def</span> <span class="nf">getTimeCat</span><span class="p">(</span><span class="n">Datetime</span><span class="p">):</span>
+    <span class="c1"># extract time categoriesa</span>
+    <span class="c1">#str_time = datetime.strptime(Datetime, "%m/%j/%y %H:%M").time()</span>
+    <span class="n">str_time</span> <span class="o">=</span> <span class="n">Datetime</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="c1"># --&gt; Morning = 0400-1000</span>
+    <span class="n">mornStart</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">mornEnd</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># --&gt; Midday = 1000-1600</span>
+    <span class="n">midStart</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">midEnd</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># --&gt; Evening = 1600-2200</span>
+    <span class="n">eveStart</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">eveEnd</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># --&gt; Late Night = 2200-0400</span>
+    <span class="n">lateStart</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">Midnighy</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">lateEnd</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">time</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">str_time</span> <span class="o">&gt;=</span> <span class="n">mornStart</span> <span class="ow">and</span> <span class="n">str_time</span> <span class="o">&lt;=</span> <span class="n">mornEnd</span><span class="p">:</span>
+      <span class="n">timecat</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1">#morning</span>
+    
+    <span class="k">elif</span> <span class="n">str_time</span> <span class="o">&gt;=</span> <span class="n">midStart</span> <span class="ow">and</span> <span class="n">str_time</span> <span class="o">&lt;=</span> <span class="n">midEnd</span><span class="p">:</span>
+      <span class="n">timecat</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#midday</span>
+    <span class="k">elif</span> <span class="n">str_time</span> <span class="o">&gt;=</span> <span class="n">eveStart</span> <span class="ow">and</span> <span class="n">str_time</span> <span class="o">&lt;=</span> <span class="n">eveEnd</span><span class="p">:</span>
+      <span class="n">timecat</span> <span class="o">=</span> <span class="mi">2</span> <span class="c1">#evening</span>
+    <span class="k">elif</span> <span class="n">str_time</span> <span class="o">&gt;=</span> <span class="n">eveStart</span> <span class="ow">or</span> <span class="p">(</span><span class="n">str_time</span> <span class="o">&gt;=</span> <span class="n">Midnighy</span> <span class="ow">and</span> <span class="n">str_time</span> <span class="o">&lt;=</span> <span class="n">lateEnd</span><span class="p">):</span>
+      <span class="n">timecat</span> <span class="o">=</span> <span class="mi">3</span> <span class="c1">#late night</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">timecat</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">return</span> <span class="n">timecat</span>
+
+<span class="c1">#traindf['day_part'] =</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="p">[</span><span class="s1">'timecat_'</span><span class="p">]</span> <span class="o">=</span> <span class="n">traindf</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">getTimeCat</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'timecat_'</span><span class="p">)[</span><span class="s1">'count'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">bar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">'mean count'</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">'Count by Time Category'</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/plain">
+<pre>Text(0.5,1,'Count by Time Category')</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/x8iQhe+PDbM0wAAAABJRU5ErkJggg==" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="p">[</span><span class="s1">'humidity_temp_'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">traindf</span><span class="o">.</span><span class="n">humidity</span><span class="p">)</span> <span class="o">*</span> <span class="n">traindf</span><span class="o">.</span><span class="n">temp</span><span class="o">**</span><span class="mi">2</span> 
+
+<span class="n">traindf</span><span class="p">[</span><span class="s1">'temp_'</span><span class="p">]</span> <span class="o">=</span> <span class="n">traindf</span><span class="p">[</span><span class="s1">'temp'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">traindf</span><span class="p">[</span><span class="s1">'atemp_'</span><span class="p">]</span> <span class="o">=</span> <span class="n">traindf</span><span class="p">[</span><span class="s1">'atemp'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="n">traindf</span> <span class="o">=</span> <span class="n">traindf</span><span class="o">.</span><span class="n">replace</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">],</span> <span class="mf">1e6</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">traindf</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child jp-OutputArea-executeResult">
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[ ]:</div>
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output jp-OutputArea-executeResult" tabindex="0" data-mime-type="text/html">
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {<br />
+        vertical-align: middle;<br />
+    }</p>
+<p>    .dataframe tbody tr th {<br />
+        vertical-align: top;<br />
+    }</p>
+<p>    .dataframe thead th {<br />
+        text-align: right;<br />
+    }<br />
+</style>
+<table class="dataframe" border="1">
+<thead>
+<tr style="text-align: right;">
+<th> </th>
+<th>datetime</th>
+<th>season</th>
+<th>holiday</th>
+<th>workingday</th>
+<th>weather</th>
+<th>temp</th>
+<th>atemp</th>
+<th>humidity</th>
+<th>windspeed</th>
+<th>casual</th>
+<th>registered</th>
+<th>count</th>
+<th>timecat_</th>
+<th>humidity_temp_</th>
+<th>temp_</th>
+<th>atemp_</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>2011-01-01 00:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>81</td>
+<td>0.0</td>
+<td>3</td>
+<td>13</td>
+<td>16</td>
+<td>3</td>
+<td>1.195378</td>
+<td>9</td>
+<td>14</td>
+</tr>
+<tr>
+<th>1</th>
+<td>2011-01-01 01:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.02</td>
+<td>13.635</td>
+<td>80</td>
+<td>0.0</td>
+<td>8</td>
+<td>32</td>
+<td>40</td>
+<td>3</td>
+<td>1.017005</td>
+<td>9</td>
+<td>13</td>
+</tr>
+<tr>
+<th>2</th>
+<td>2011-01-01 02:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.02</td>
+<td>13.635</td>
+<td>80</td>
+<td>0.0</td>
+<td>5</td>
+<td>27</td>
+<td>32</td>
+<td>3</td>
+<td>1.017005</td>
+<td>9</td>
+<td>13</td>
+</tr>
+<tr>
+<th>3</th>
+<td>2011-01-01 03:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>75</td>
+<td>0.0</td>
+<td>3</td>
+<td>10</td>
+<td>13</td>
+<td>3</td>
+<td>1.291008</td>
+<td>9</td>
+<td>14</td>
+</tr>
+<tr>
+<th>4</th>
+<td>2011-01-01 04:00:00</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>9.84</td>
+<td>14.395</td>
+<td>75</td>
+<td>0.0</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>1.291008</td>
+<td>9</td>
+<td>14</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre> </pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre> </pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#prepare a data</span>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.dummy</span> <span class="kn">import</span> <span class="n">DummyRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">SGDRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<span class="kn">import</span> <span class="nn">xgboost</span> <span class="k">as</span> <span class="nn">xgb</span>
+<span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<span class="c1">#traindf_float = traindf.copy()</span>
+<span class="c1">#traindf_float['Date'] = traindf_float['Date'].values.astype(float)</span>
+<span class="sd">'''</span>
+<span class="sd">Index(['datetime', 'season', 'holiday', 'workingday', 'weather', 'temp',</span>
+<span class="sd">       'atemp', 'humidity', 'windspeed', 'casual', 'registered', 'count',</span>
+<span class="sd">       'timecat_', 'humidity_temp_', 'temp_', 'atemp_']</span>
+
+<span class="sd">'''</span>
+<span class="n">columns_use</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">'weather'</span>
+<span class="c1">#                ,'temp'</span>
+<span class="c1">#                ,'humidity'</span>
+<span class="c1">#                ,'windspeed'</span>
+               <span class="p">,</span><span class="s1">'season'</span>
+               <span class="p">,</span><span class="s1">'workingday'</span>
+               <span class="p">,</span><span class="s1">'holiday'</span>
+              <span class="p">,</span><span class="s1">'timecat_'</span>
+              <span class="p">,</span><span class="s1">'humidity_temp_'</span>
+<span class="c1">#               ,'temp_'</span>
+            <span class="p">,</span><span class="s1">'atemp_'</span>
+               <span class="p">,</span><span class="s1">'count'</span><span class="p">]</span>
+
+<span class="c1">#remove outliers</span>
+<span class="c1">#traindf_no_out = traindf.loc[abs(scipy.stats.zscore(traindf['count']))&lt;2]</span>
+
+
+<span class="n">feature_matrix</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="n">columns_use</span><span class="p">])</span>
+<span class="c1"># feature_matrix = traindf[columns_use].values</span>
+
+<span class="n">X_ss</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">y_ss</span> <span class="o">=</span> <span class="n">feature_matrix</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">sig</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c1"># X_l = feature_matrix[abs(feature_matrix[:,-1])&lt;sig,:-1]</span>
+<span class="n">X_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">traindf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]))</span><span class="o">&lt;</span><span class="n">sig</span><span class="p">,</span><span class="n">columns_use</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+<span class="n">y_l</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">traindf</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">zscore</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]))</span><span class="o">&lt;</span><span class="n">sig</span><span class="p">,</span><span class="s1">'count'</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Original shape:'</span><span class="p">,</span><span class="n">X_ss</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="s1">'</span><span class="se">\n</span><span class="s1">Out. cleand shape: '</span><span class="p">,</span><span class="n">X_l</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>Original shape: (10886, 7) 
+Out. cleand shape:  (10739, 7)
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">fig</span><span class="p">,</span><span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">set_size_inches</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">line</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'RV Distribution (StandardScaler)'</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">'Probability'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'QQ Plot on RV Distribution (StandardScaler)'</span><span class="p">)</span>
+
+
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]),</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]),</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">line</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'RV Distribution (log1p)'</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">'Probability'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'QQ Plot on RV Distribution (log1p)'</span><span class="p">)</span>
+
+
+<span class="n">sns</span><span class="o">.</span><span class="n">distplot</span><span class="p">(</span><span class="n">y_l</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">sm</span><span class="o">.</span><span class="n">qqplot</span><span class="p">(</span><span class="n">y_l</span><span class="p">,</span><span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">line</span><span class="o">=</span><span class="s1">'s'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'RV Distribution (log1p+3sig rem)'</span><span class="p">,</span><span class="n">ylabel</span><span class="o">=</span><span class="s1">'Probability'</span><span class="p">)</span>
+<span class="n">axs</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">'QQ Plot on RV Distribution (log1p+3sig rem)'</span><span class="p">)</span>
+
+<span class="c1">#scipy.stats.normaltest(traindf['count'])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'normaltest p-values for RV:</span><span class="se">\n</span><span class="s1">Raw:'</span>
+      <span class="p">,</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span>
+      <span class="p">,</span><span class="s1">'</span><span class="se">\n</span><span class="s1">log1p transformed:'</span><span class="p">,</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log1p</span><span class="p">(</span><span class="n">traindf</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]))</span><span class="o">.</span><span class="n">pvalue</span>
+     <span class="p">,</span><span class="s1">'</span><span class="se">\n</span><span class="s1">log1p with 3sig removed:'</span><span class="p">,</span><span class="n">scipy</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">normaltest</span><span class="p">(</span><span class="n">y_l</span><span class="p">)</span><span class="o">.</span><span class="n">pvalue</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>normaltest p-values for RV:
+Raw: 0.0 
+log1p transformed: 9.264576012810486e-221 
+log1p with 3sig removed: 1.4561149236527596e-225
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/OlPfyIjI6NGk8EI4cqkpVAIIYQQQgghGjFpKRRCCCGEEEKIRkyKQiGEEEIIIYRoxKQoFEIIIYQQQohGTIpCIYQQQgghhGjEpCgUQgghhBBCiEZMikIhhBBCCCGEaMT+P0CeBTNlki8DAAAAAElFTkSuQmCC" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span> <span class="p">,</span> <span class="n">y_train</span> <span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_ss</span><span class="p">,</span><span class="n">y_ss</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">X_train_l</span><span class="p">,</span> <span class="n">X_test_l</span> <span class="p">,</span> <span class="n">y_train_l</span> <span class="p">,</span> <span class="n">y_test_l</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X_l</span>
+                                                              <span class="p">,</span><span class="n">y_l</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+
+<span class="n">dtrain</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">dtest</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_test</span><span class="p">)</span>
+
+<span class="n">dtrain_lg</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_train_l</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_train_l</span><span class="p">)</span>
+<span class="n">dtest_lg</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">DMatrix</span><span class="p">(</span><span class="n">X_test_l</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">y_test_l</span><span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#define a baseline model</span>
+
+
+<span class="n">baseline_est</span> <span class="o">=</span> <span class="n">DummyRegressor</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">'median'</span><span class="p">)</span>
+<span class="n">baseline_est</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_l</span><span class="p">,</span><span class="n">y_train_l</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">---Baseline Score---</span><span class="se">\n\t</span><span class="s2">   R^2 test = "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">baseline_est</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_l</span><span class="p">,</span><span class="n">y_test_l</span><span class="p">),</span><span class="mi">2</span><span class="p">)))</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>	---Baseline Score---
+	   R^2 test = -0.08
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">reg_optimizer</span> <span class="o">=</span> <span class="n">SGDRegressor</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="n">reg_optimizer_l</span> <span class="o">=</span>  <span class="n">SGDRegressor</span><span class="p">(</span><span class="n">penalty</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="n">reg_optimizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">reg_optimizer_l</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_l</span><span class="p">,</span><span class="n">y_train_l</span><span class="p">)</span>
+
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">reg_optimizer</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_pred_l</span> <span class="o">=</span> <span class="n">reg_optimizer_l</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test_l</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\t</span><span class="s2">---GB (no reg) Score---</span><span class="se">\n\t</span><span class="s2">   R^2 test = "</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">reg_optimizer</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span><span class="o">+</span>
+      <span class="s1">'</span><span class="se">\n\t</span><span class="s1">MAE='</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span><span class="n">y_pred</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+      <span class="o">+</span><span class="s1">'</span><span class="se">\n\t</span><span class="s1">MAE (l)='</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_test_l</span><span class="p">,</span><span class="n">y_pred_l</span><span class="p">),</span><span class="mi">2</span><span class="p">))</span>
+     <span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>	---GB (no reg) Score---
+	   R^2 test = 0.2
+	MAE=0.67
+	MAE (l)=1.3662604833008612e+18
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#defould XGBoost </span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'max_depth'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+ <span class="s1">'min_child_weight'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">'subsample'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">'colsample_bytree'</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+ <span class="s1">'eta'</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span>
+ <span class="s1">'objective'</span><span class="p">:</span> <span class="s1">'reg:squarederror'</span><span class="p">,</span>
+ <span class="s1">'eval_metric'</span><span class="p">:</span> <span class="s1">'mae'</span>
+         <span class="p">}</span>
+
+
+
+<span class="n">num_boost_round</span> <span class="o">=</span> <span class="mi">999</span>
+
+<span class="n">early_stopping_round</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="n">evals</span> <span class="o">=</span> <span class="p">[(</span><span class="n">dtest</span><span class="p">,</span> <span class="s2">"Test"</span><span class="p">)]</span>
+
+
+<span class="n">xgb_optimizer</span> <span class="o">=</span> <span class="n">xgb</span><span class="o">.</span><span class="n">train</span><span class="p">(</span><span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+        <span class="n">dtrain</span><span class="o">=</span><span class="n">dtrain</span><span class="p">,</span>
+        <span class="n">num_boost_round</span><span class="o">=</span><span class="n">num_boost_round</span><span class="p">,</span>
+        <span class="n">evals</span><span class="o">=</span><span class="n">evals</span><span class="p">,</span>
+        <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="n">early_stopping_round</span>
+                         <span class="p">)</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>[0]	Test-mae:0.797428
+
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="n">xgb</span><span class="o">.</span><span class="n">plot_importance</span><span class="p">(</span><span class="n">xgb_optimizer</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="n">columns_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">columns_use</span><span class="p">))})</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>{0: 'weather',
+ 1: 'season',
+ 2: 'workingday',
+ 3: 'holiday',
+ 4: 'timecat_',
+ 5: 'humidity_temp_',
+ 6: 'atemp_',
+ 7: 'count'}
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/7ryZVsAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#XGB  model</span>
+<span class="n">xgb_opt</span> <span class="o">=</span> <span class="n">XGBoostOptimizer</span><span class="p">(</span><span class="n">dtrain</span><span class="o">=</span><span class="n">dtrain_lg</span><span class="p">,</span><span class="n">dtest</span><span class="o">=</span><span class="n">dtest_lg</span><span class="p">,</span><span class="n">cv_metrics</span> <span class="o">=</span> <span class="s2">"mae"</span>
+                                            <span class="p">,</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="n">xgb_opt</span><span class="o">.</span><span class="n">run_optimizer</span><span class="p">(</span><span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">xgb_opt</span><span class="o">.</span><span class="n">plot_optimization</span><span class="p">()</span>
+<span class="n">fin_model</span> <span class="o">=</span> <span class="n">xgb_opt</span><span class="o">.</span><span class="n">get_best_model</span><span class="p">()</span>
+
+<span class="n">xgb</span><span class="o">.</span><span class="n">plot_importance</span><span class="p">(</span><span class="n">fin_model</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="n">columns_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">columns_use</span><span class="p">))})</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/cILL5gdihA+J0N2QgghLEEKkhBCCEuQITshhBCWIHdIQgghLEEKkhBCCEuQgiSEEMISpCAJIYSwBClIQgghLEEKkhBCCEv4f5oLCHBs4arkAAAAAElFTkSuQmCC" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>{0: 'weather',
+ 1: 'windspeed',
+ 2: 'season',
+ 3: 'workingday',
+ 4: 'holiday',
+ 5: 'timecat_',
+ 6: 'humidity_temp_',
+ 7: 'atemp_',
+ 8: 'count'}
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/4KIT3TTllAMAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+<p><!-- /wp:html --></p>
+<p><!-- wp:html --></p>
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser"> </div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-ipython3">
+<pre><span class="c1">#XGB  model</span>
+<span class="n">xgb_opt</span> <span class="o">=</span> <span class="n">XGBoostOptimizer</span><span class="p">(</span><span class="n">dtrain</span><span class="o">=</span><span class="n">dtrain</span><span class="p">,</span><span class="n">dtest</span><span class="o">=</span><span class="n">dtest</span><span class="p">,</span><span class="n">cv_metrics</span> <span class="o">=</span> <span class="s2">"mae"</span>
+                                            <span class="p">,</span><span class="n">params</span> <span class="o">=</span> <span class="n">params</span><span class="p">)</span>
+
+<span class="n">xgb_opt</span><span class="o">.</span><span class="n">run_optimizer</span><span class="p">(</span><span class="n">refit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">xgb_opt</span><span class="o">.</span><span class="n">plot_optimization</span><span class="p">()</span>
+<span class="n">fin_model</span> <span class="o">=</span> <span class="n">xgb_opt</span><span class="o">.</span><span class="n">get_best_model</span><span class="p">()</span>
+
+<span class="n">xgb</span><span class="o">.</span><span class="n">plot_importance</span><span class="p">(</span><span class="n">fin_model</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">({</span><span class="n">i</span><span class="p">:</span> <span class="n">columns_use</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">columns_use</span><span class="p">))})</span>
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser"> </div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>Level selected = complexity
+Solving best parameters ...</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>Best stage params: 0.01, -1, mae: 0.4396688
+Finished optimization.
+Best params: {'max_depth': 9, 'min_child_weight': 6, 'subsample': 1.0, 'colsample_bytree': 0.9, 'eta': 0.01, 'objective': 'reg:squarederror', 'eval_metric': 'mae'}
+
+
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/R+NEGo8TlkahAAAAABJRU5ErkJggg==" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<div class="jp-RenderedText jp-OutputArea-output" tabindex="0" data-mime-type="text/plain">
+<pre>{0: 'weather',
+ 1: 'windspeed',
+ 2: 'season',
+ 3: 'workingday',
+ 4: 'holiday',
+ 5: 'timecat_',
+ 6: 'humidity_temp_',
+ 7: 'atemp_',
+ 8: 'count'}
+</pre>
+</div>
+</div>
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"> </div>
+<figure><img class="" src="{{site.baseurl}}/assets/2019/06/9hIaGEh0dzciRI9FoNLRr14569erRqVMn0tPTmTZtGgaDgaZNmzJ48OCn3odOp2PixImsWbOGRYsWqQE0bNgwa7UphBmZD0IIIYRFcopJCCGERRIQQgghLJKAEEIIYZEEhBBCCIskIIQQQlgkASGEEMIiCQghhBAWSUAIIYSwSAJCCCGERf8fMQ0zKXIGHAkAAAAASUVORK5CYII=" alt="No description has been provided for this image"></figure>
+<div class="jp-RenderedImage jp-OutputArea-output" tabindex="0"></div>
+</div>
+</div>
+</div>
+</div>
+<p><!-- /wp:html --><br />
+</body></html></p>

@@ -1,6 +1,8 @@
 theme: jekyll-theme-minimal
 title: Vova's Blog Homepage # You can update this
-description: Bookmark this to keep an eye on my project updates! # You can update this
+description: >
+  Hi, I’m Vladimir Eremin, I am a data scientist during the day and sometimes at night as well. Welcome to my blog, where I share stories hidden behind data. Here, I explore the realms of data science, quantitative finance, and problem-solving. This blog has started as my offline journal and and some point I decided to start publishing in the hope it may be helpful for others as well. Please look around if something catches your eye. Feel free to reach out to me if you have questions or suggestions.
+  Additionally, for those of you in NYC, I co-host a data science meetup - if you’re around, I’ll be happy to meet you at our next event!
 
 # Basic GitHub Pages settings
 baseurl: "" # For user/organization pages like erv4gen.github.io
@@ -12,6 +14,7 @@ kramdown:
   input: GFM
   hard_wrap: false
   syntax_highlighter: rouge # Optional: for code highlighting
+  math_engine: mathjax
 
 # Plugins (GitHub Pages has a specific list of supported plugins)
 # If you add plugins not on the list, you might need a GitHub Action to build.
