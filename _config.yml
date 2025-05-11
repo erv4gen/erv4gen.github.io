@@ -19,8 +19,18 @@ kramdown:
 # Plugins (GitHub Pages has a specific list of supported plugins)
 # If you add plugins not on the list, you might need a GitHub Action to build.
 # For now, jekyll-theme-minimal handles basic needs.
-# plugins:
-#   - jekyll-feed # For RSS feed, supported by GitHub Pages
+plugins:
+  - jekyll-feed # For RSS feed, supported by GitHub Pages
+  - jekyll-archives
+
+# Jekyll Archives configuration
+jekyll-archives:
+  enabled:
+    - tags
+  layouts:
+    tag: archive-tag # You'll need to create _layouts/archive-tag.html
+  permalinks:
+    tag: '/tag/:name/'
 
 # Exclude from processing.
 exclude:

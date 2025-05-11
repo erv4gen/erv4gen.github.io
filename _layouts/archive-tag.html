@@ -1,0 +1,30 @@
+---
+layout: default
+---
+
+<article class="page">
+  <header class="page-header">
+    <h1 class="page-title">Posts tagged "{{ page.title | escape }}"</h1>
+  </header>
+  <div class="page-content">
+    {%- if page.posts.size > 0 -%}
+      <ul class="post-list">
+        {%- for post in page.posts -%}
+          <li>
+            <h3>
+              <a class="post-link" href="{{ post.url | relative_url }}">
+                {{ post.title | escape }}
+              </a>
+            </h3>
+            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+            {%- if post.excerpt -%}
+              <p>{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <p>No posts found for this tag.</p>
+    {%- endif -%}
+  </div>
+</article>
