@@ -1,0 +1,17 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+/* ---- Color overrides: blue -> black/grey ---- */
+
+/* Primary: links */
+a {
+  color: #333;
+}
+
+/* Secondary: link hover / focus */
+a:hover,
+a:focus {
+  color: #000;
+}
