@@ -1,14 +1,12 @@
 ---
 layout: post
-title: "The Maker-Taker Coin Game: A Statistical Look at Prediction Market Pricing (Part 1)"
+title: "The Maker-Taker Coin Game: A Statistical Look at Prediction Market Pricing Part 1"
 date: 2026-06-08 00:00:00 +00:00
 categories:
   - Finance
 tags:
+  - finance
   - polymarket
-  - prediction-markets
-  - quantitative-finance
-  - statistics
 published: true
 ---
 
