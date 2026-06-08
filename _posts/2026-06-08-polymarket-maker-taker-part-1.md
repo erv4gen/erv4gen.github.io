@@ -40,13 +40,16 @@ Let's call  $K$ the price Alice will pay to contribute to the game. Bob will pay
 | Heads   | $p$         | $1-K$        | $-(1-K)$   |     |
 | Tails   | $1-p$       | $-K$         | $K$        |     |
 
-Alice’s expected value is:
+Alice’s expected value is: 
 $$EV_{Alice} = p(1 - K) + (1-p)(-K) = p - K$$
-Bob’s expected value is:
+
+Bob’s expected value is: 
 $$EV_{Bob} = (1-p) \cdot K + p \cdot (-(1-K)) = K - p$$
 
 The edge $\alpha$ in this game is the absolute mispricing between the agreed price and the true probability:
+
 $$ \alpha = | K - p |= |\text{price paid} - \text{actual probability}|$$
+
 If Alice's estimate of the true probability of head $\hat{p}$ better than the agreed price $K$, then Alice owns the edge, otherwise, Bob does.
 
 Alice knows several things about the bag of coins:
@@ -60,12 +63,18 @@ Let's say, she observed M different groups. Being statistician, she decides to c
 ## Variance of a Single Bet
 
 Since she knows that the true probability $p$ can be anywhere in $[0,1]$ 
+
 $$p \sim \text{Uniform(0,1)}$$
+
 She wants to understand how her *risk* changes across different kind of bets: (1) low-probability of head, (2) fair-ish coins, (3) high-probability head.
 For a head bet at price $K$ her profit $X$ takes values $(1-K)$ with probability $p$ and $-K$ with probability $(1-p)$. Since 
+
 $$X = Y - K$$
+
 $$Y \sim \text{Bernoulli}(p)$$
+
 the price $K$ drops out of the variance equation:
+
 $$\text{Var}(X) = \text{Var}(Y - K) = \text{Var}(Y) = p(1-p)$$
 
 | Region    | $K$  | $p$  | $σ = \sqrt{p(1-p)}$ |
@@ -82,7 +91,9 @@ Variance peaks at $p ≈ 0.5$ and is lowest in the tails. Alice knows that she t
 Alice decide to follow the strategy:
 1. For the first $\widetilde{N}$ bets, she'll doesn't participate in the market, only observe outcomes for each coin, grouped in $M$ groups
 2. Then, for each group, she computes empirical hit rate:
+
 $$\widehat{p_m} = \frac{\sum{X_m}}{N_m}$$
+
 3. She selects only groups where $\widehat{p_m}$ is around $0.1$ or $0.9$, to minimize the payoff variance. 
 
 So what would be the realized payoff for Alice?
@@ -95,21 +106,31 @@ For that to happen, she wants to have an answer for the following an important q
 > Given the estimated probability $\widehat{p_m}$ and edge $\alpha= \widehat{p_m} - K$, how many bets $N_m$ does Alice need to place to have a high likelihood that her payoff will be positive?
 
 With $N$ independent bets, the Central Limit Theorem gives us the approximation of the average payoff:
+
 $$\bar{X}_M \sim \mathcal{N}\left(\mu_M, \frac{\sigma^2}{N_{\text{M}}}\right)$$
+
 Where $\frac{σ}{\sqrt{N_M}}$ is the Standard Error $SE$ of the payoff mean. For Alice, the profitability condition for her game is that the lower bound of $CI > 0$:
+
 $$\mu - z_\alpha \cdot \frac{\sigma}{\sqrt{N_M}} > 0$$
+
 Solving for the minimum number of bets:
+
 $$\boxed{N_{\text{M}} > \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2}$$
+
 Alice can use the formula above to determine how many bets she needs to place at a given edge $\alpha$ to lock the positive payoff. 
 
 For example, suppose Alice estimates she has an edge of $\alpha=3\%$ for a high-likelihood low-risk coin (e.g. she places a bet price $K=0.87$ at the estimated $\hat{p}=90\%$).
 Then:
+
 $$\mu=\widehat{p}-K=0.03$$
+
 and if, using the lookup from the table above: 
+
 $$\sigma \approx 0.26$$
 For Alice, to achieve profitability with 95% ($z_{\alpha} \approx 1.96$) confidence she needs to make at least:
 
 $$N > \left(\frac{1.96 \times 0.26}{0.03}\right)^2 \approx 289 \text{ bets}$$
+
 To make the lower confidence bound of her PnL positive. 
 
 Below is the graph showing the relationship between min number of bets $N$ as a function of $\mu$:
@@ -152,13 +173,20 @@ We can clearly see that starting at the same initial balance, Bob slowly but sur
 In most of known markets uninformed, unsophisticated takers will drain their bankroll to makers. Their core difference is that they optimize different objectives:
 
 Maker Alice optimize her cumulative PnL:
+
 $$\max_{\mathcal{B}} \; \mathbb{E}[\Pi_T]$$
+
 Where:
 $$\Pi_T=\sum_{t=1}^{T} X_t$$
- Alice only accepts bet groups $\mathcal{B}$ where the lower confidence bound is positive:
+
+Alice only accepts bet groups $\mathcal{B}$ where the lower confidence bound is positive:
+
 $$\mu_m-z_\alpha\frac{\sigma_m}{\sqrt{N_m}}>0$$
+
 So her objective becomes:
+
 $$\max_{\mathcal{B}} \sum_{m \in \mathcal{B}} N_m \mu_m \quad \text{s.t.} \quad \mu_m-z_\alpha\frac{\sigma_m}{\sqrt{N_m}}>0$$
+
 Reactive taker Bob doesn't apply any formal objective, so his behavior is random and governed by the volatility of his bets and his long-term survival is only possible, if the Alice systematically misprice her bets. 
 In more realistic game, when players can set the size of the bet, as Bob accumulates losses, and start making impulsive, emotional judgments, he risks pushing himself to apply the martingale strategy to quickly recover losses. Unfortunately to him, this strategy is known to achieve gambler's ruin under the finite bankroll with probability approaches 1.
 
