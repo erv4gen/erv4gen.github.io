@@ -93,10 +93,10 @@ permalink: "/stock-volatility-simulation/"
 $$ \text{Risk}=\mathbb{E}(\text{price}_a &lt; \text{price}_b)$$</p>
 <p><!-- /wp:html --></p>
 <p><!-- wp:paragraph --></p>
-<p>Where $latex \text{price}_a$ is simulated current/ending price of the period, and $latex \text{price}_b$ is a starting price of the period.</p>
+<p>Where $\text{price}_a$ is simulated current/ending price of the period, and $\text{price}_b$ is a starting price of the period.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Then we can set up the "<em>risk thresholds</em>" that could be identified as: "If an asset has more than $latex n%$ risk of negative return, we should consider it as non-inestimable" or "If an asset has more than $latex n%$ risk of negative return we won't open a short option position on it"</p>
+<p>Then we can set up the "<em>risk thresholds</em>" that could be identified as: "If an asset has more than $n%$ risk of negative return, we should consider it as non-inestimable" or "If an asset has more than $n%$ risk of negative return we won't open a short option position on it"</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>"Simulated" price means a theoretical price drown from the approximate distribution of the asset volatility. If the distribution is known (or at least the most appropriate one) we can use Monte Carlo simulations to "look to the future" and estimate where price could be after n-periods of time.</p>
@@ -207,7 +207,7 @@ $$ \widehat{\mathrm{Var}}(x_{t+1} + \ldots + x_{t+K}) = \widehat{\mathrm{Var}}(x
   "</code></pre>
 <p><!-- /wp:code --></p>
 <p><!-- wp:paragraph --></p>
-<p>Datapoints are draws from Gamma distribution with alpha and beta parameters. Alpha and beta for their part are drowned from a normal distribution with $latex \mu$ and $latex \frac{1}{\sigma^2}$ square parameters. Mu parameter is set up as an MLE from the KS test, while $latex \sigma^2$ is remaining free.</p>
+<p>Datapoints are draws from Gamma distribution with alpha and beta parameters. Alpha and beta for their part are drowned from a normal distribution with $\mu$ and $\frac{1}{\sigma^2}$ square parameters. Mu parameter is set up as an MLE from the KS test, while $\sigma^2$ is remaining free.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>The simulations were run in three chains with <em>1e5</em> iterations each. The burn-in period was set up to <em>1e3</em> iterations.</p>
