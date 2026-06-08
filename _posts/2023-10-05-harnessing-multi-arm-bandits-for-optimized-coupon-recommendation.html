@@ -92,7 +92,7 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p>Moreover, bandits incorporate a system of rewards, where a successful recommendation (like a user clicking on a recommended item) garners a '<strong>reward</strong>'. Over time, these rewards inform the algorithm about the likelihood of different items being appreciated by different users, further refining the recommendation process. This harmonious blend of uncertainty, exploration, and learning makes bandit algorithms a compelling approach to mitigating the issues prevalent in the realm of recommendation systems.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Reward is usually denoted as $latex R_t $</p>
+<p>Reward is usually denoted as $ R_t $</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:quote --></p>
 <blockquote class="wp-block-quote"><p>
@@ -107,14 +107,14 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>The number of available actions is denoted by the letter $latex k$</li>
+<li>The number of available actions is denoted by the letter $ k$</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
 <li>
-<strong>Action</strong>: the action taken at time-step $latex t$ is denoted as $latex A_t$</li>
+<strong>Action</strong>: the action taken at time-step $ t$ is denoted as $ A_t$</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>Each of the available $latex k$ actions has an <strong>expected reward: Q(a):</strong><br>$$Q(a) = E[R_t | A_t = a]$$</li>
+<li>Each of the available $ k$ actions has an <strong>expected reward: Q(a):</strong><br>$$Q(a) = E[R_t | A_t = a]$$</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
@@ -137,7 +137,7 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <ol>
 <!-- wp:list-item --></p>
 <li>
-<strong>Epsilon-Greedy</strong>: This algorithm operates by using a probability $latex ε$ to determine if it will explore or exploit. So, the reward function could be represented like:</li>
+<strong>Epsilon-Greedy</strong>: This algorithm operates by using a probability $ ε$ to determine if it will explore or exploit. So, the reward function could be represented like:</li>
 <p><!-- /wp:list-item -->
 </ol>
 <p><!-- /wp:list --></p>
@@ -150,13 +150,13 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>$latex R_t$ represents the chosen action at time $latex t$,</li>
+<li>$ R_t$ represents the chosen action at time $ t$,</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>$latex Q_t(a)$ is the estimated value of action $latex a$ at time $latex t$, and</li>
+<li>$ Q_t(a)$ is the estimated value of action $ a$ at time $ t$, and</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>$latex ε$ is the probability of choosing to explore rather than exploit.</li>
+<li>$ ε$ is the probability of choosing to explore rather than exploit.</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
@@ -172,7 +172,7 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p>$$A_t = \text{argmax}_{a} \left[ Q_t(a) + c \sqrt{\frac{\ln t}{N_t(a)}} \right]$$</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Where $latex A_t$ is the action chosen at time $latex t$, $latex Q_t(a)$ is the estimated value of action $latex a$ at time $latex t$, $latex c$ is a constant determining the level of exploration, $latex N_t(a)$ is the number of times action $latex a$ has been chosen up to time $latex t$, and $latex l_n$ is the natural logarithm.</p>
+<p>Where $ A_t$ is the action chosen at time $ t$, $ Q_t(a)$ is the estimated value of action $ a$ at time $ t$, $ c$ is a constant determining the level of exploration, $ N_t(a)$ is the number of times action $ a$ has been chosen up to time $ t$, and $ l_n$ is the natural logarithm.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:list {"ordered":true} --></p>
 <ol>
@@ -188,7 +188,7 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p>$$A_t = \text{argmax}_{a} \left[ \text{Sample from } β(R_{1:t-1}(a), T_{1:t-1}(a)) \right]$$</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Where $latex A_t$ is the action chosen at time $latex t$, $latex β$ represents a Beta distribution (commonly used in Thompson Sampling when rewards are binary), $latex R_{1:t-1}(a)$ is the sum of rewards for action $latex a$ up to time $latex t-1$, and $latex T_{1:t-1}(a)$ is the total number of times action $latex a$ has been chosen up to time $latex t-1$.</p>
+<p>Where $ A_t$ is the action chosen at time $ t$, $ β$ represents a Beta distribution (commonly used in Thompson Sampling when rewards are binary), $ R_{1:t-1}(a)$ is the sum of rewards for action $ a$ up to time $ t-1$, and $ T_{1:t-1}(a)$ is the total number of times action $ a$ has been chosen up to time $ t-1$.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>Our primary focus will be on Thomson Sampling, as it frequently surpasses both epsilon-greedy and UCB algorithms in performance. For readers interested in delving deeper into each algorithm and exploring a comprehensive comparison between them, we've included pertinent links in the reference section.</p>
@@ -197,25 +197,25 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <h2 class="wp-block-heading">Data For Bandits</h2>
 <p><!-- /wp:heading --></p>
 <p><!-- wp:paragraph --></p>
-<p>Returning to our shopkeeper scenario, after acquiring a solid understanding of multi-arm bandits and different reward functions, our shopkeeper resolves to employ the Thompson Sampling technique to identify the optimal offer for each of his patrons. His store, being somewhat removed from the bustling main street, sees a regular flow of three individuals passing by daily - we'll denote these as Person $latex P_1$, $latex P_2$, and $latex P_3$.</p>
+<p>Returning to our shopkeeper scenario, after acquiring a solid understanding of multi-arm bandits and different reward functions, our shopkeeper resolves to employ the Thompson Sampling technique to identify the optimal offer for each of his patrons. His store, being somewhat removed from the bustling main street, sees a regular flow of three individuals passing by daily - we'll denote these as Person $ P_1$, $ P_2$, and $ P_3$.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>For each individual $latex P_i$ (where $latex i$ ranges from 1 to 3), there are five potential offers (or actions) that the shopkeeper could extend, denoted as $latex a_1, a_2, \ldots, a_5$. Notably, he also posits that not all individuals may necessarily need an offer to visit the store. To verify this hypothesis, he decides to occasionally abstain from extending any offers at all, thereby establishing a control observation for his experiment.</p>
+<p>For each individual $ P_i$ (where $ i$ ranges from 1 to 3), there are five potential offers (or actions) that the shopkeeper could extend, denoted as $ a_1, a_2, \ldots, a_5$. Notably, he also posits that not all individuals may necessarily need an offer to visit the store. To verify this hypothesis, he decides to occasionally abstain from extending any offers at all, thereby establishing a control observation for his experiment.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>With each passing day, the shopkeeper observes the interactions of each individual with the varying offers (including the no-offer scenario), aiming to discern the optimal action $latex A_i$ for each person $latex i$. This optimal action would not only encourage a higher frequency of store visits (improving conversion rates), but also exhibit an uplift over the control scenario of no offers. In doing so, the shopkeeper can ensure his marketing campaign is cost-efficient, only extending offers when they demonstrably enhance store visitation.</p>
+<p>With each passing day, the shopkeeper observes the interactions of each individual with the varying offers (including the no-offer scenario), aiming to discern the optimal action $ A_i$ for each person $ i$. This optimal action would not only encourage a higher frequency of store visits (improving conversion rates), but also exhibit an uplift over the control scenario of no offers. In doing so, the shopkeeper can ensure his marketing campaign is cost-efficient, only extending offers when they demonstrably enhance store visitation.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:heading --></p>
 <h2 class="wp-block-heading">Defining The Learner</h2>
 <p><!-- /wp:heading --></p>
 <p><!-- wp:paragraph --></p>
-<p>With a clear strategy in mind, the shopkeeper set forth on a two-month experiment. Each day, he displayed a distinct offer (or no offer at all) to each of the three individuals, and meticulously recorded the outcome or "reward" ($latex R$) as either a conversion (1) or non-conversion (0):</p>
+<p>With a clear strategy in mind, the shopkeeper set forth on a two-month experiment. Each day, he displayed a distinct offer (or no offer at all) to each of the three individuals, and meticulously recorded the outcome or "reward" ($ R$) as either a conversion (1) or non-conversion (0):</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>$$R_{t,i,a} =<br>\begin{cases}<br>1 &amp; \text{if conversion} \\<br>0 &amp; \text{if non-conversion}<br>\end{cases}$$</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>In this formula, $latex t$ denotes the time step or day index, $latex i$ signifies the person, and $latex a$ indicates the offer index.</p>
+<p>In this formula, $ t$ denotes the time step or day index, $ i$ signifies the person, and $ a$ indicates the offer index.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>The shopkeeper then updated the parameters of the Beta distribution for each person's offer preference using the following rules:</p>
@@ -223,18 +223,18 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>$latex \alpha_{t,i,a} := \alpha_{t-1,i,a} + R_{t,i,a}$ (representing the number of successes)</li>
+<li>$ \alpha_{t,i,a} := \alpha_{t-1,i,a} + R_{t,i,a}$ (representing the number of successes)</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>$latex \beta_{t,i,a} := \beta_{t-1,i,a} + (1 - R_{t,i,a})$ (representing the number of failures)</li>
+<li>$ \beta_{t,i,a} := \beta_{t-1,i,a} + (1 - R_{t,i,a})$ (representing the number of failures)</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
 <p><!-- wp:paragraph --></p>
-<p>Here, $latex \alpha_{t,i,a}$ and $latex \beta_{t,i,a}$ denote the parameters of the Beta distribution for person $latex i$, action $latex a$ at time step $latex t$.</p>
+<p>Here, $ \alpha_{t,i,a}$ and $ \beta_{t,i,a}$ denote the parameters of the Beta distribution for person $ i$, action $ a$ at time step $ t$.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>These updates provided the shopkeeper an estimated conversion probability $latex P_{i}(X|a)$ for each individual and offer. This probability followed a Beta distribution:</p>
+<p>These updates provided the shopkeeper an estimated conversion probability $ P_{i}(X|a)$ for each individual and offer. This probability followed a Beta distribution:</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>$$P_{i}(X|a) \sim \text{Beta}(\alpha_{t,i,a},\beta_{t,i,a})$$</p>
@@ -334,7 +334,7 @@ permalink: "/harnessing-multi-arm-bandits-for-optimized-coupon-recommendation/"
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>In stark contrast, the second customer showed a strong preference for a specific offer. The offer $latex a^{(1)}$ yielded a clear uplift in store visits compared to other offers and the control group. This data suggests that the individual was persuadable and therefore worth the investment in marketing efforts.</li>
+<li>In stark contrast, the second customer showed a strong preference for a specific offer. The offer $ a^{(1)}$ yielded a clear uplift in store visits compared to other offers and the control group. This data suggests that the individual was persuadable and therefore worth the investment in marketing efforts.</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
