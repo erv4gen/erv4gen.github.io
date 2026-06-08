@@ -3,9 +3,7 @@ layout: default
 ---
 
 <article class="page">
-  <header class="page-header">
-    <h1 class="page-title">Posts tagged "{{ page.tag | default: page.title | escape }}"</h1>
-  </header>
+  <h1 class="page-title">Posts tagged "{{ page.tag | default: page.title | escape }}"</h1>
   <div class="page-content">
     {%- assign tag_posts = site.tags[page.tag] | default: page.posts -%}
     {%- if tag_posts.size > 0 -%}
