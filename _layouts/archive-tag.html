@@ -4,12 +4,13 @@ layout: default
 
 <article class="page">
   <header class="page-header">
-    <h1 class="page-title">Posts tagged "{{ page.title | escape }}"</h1>
+    <h1 class="page-title">Posts tagged "{{ page.tag | default: page.title | escape }}"</h1>
   </header>
   <div class="page-content">
-    {%- if page.posts.size > 0 -%}
+    {%- assign tag_posts = site.tags[page.tag] | default: page.posts -%}
+    {%- if tag_posts.size > 0 -%}
       <ul class="post-list">
-        {%- for post in page.posts -%}
+        {%- for post in tag_posts -%}
           <li>
             <h3>
               <a class="post-link" href="{{ post.url | relative_url }}">
