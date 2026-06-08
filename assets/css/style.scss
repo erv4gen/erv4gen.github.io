@@ -15,3 +15,18 @@ a:hover,
 a:focus {
   color: #000;
 }
+
+/* ---- Layout: widen the content & reduce the empty left space ---- */
+/* Wide screens only — leaves the mobile single-column layout untouched. */
+@media print, screen and (min-width: 961px) {
+  .wrapper {
+    width: 1080px;
+  }
+  header,
+  footer {
+    width: 260px;
+  }
+  section {
+    width: 760px;
+  }
+}
