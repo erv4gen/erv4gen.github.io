@@ -8,6 +8,12 @@ tags:
   - finance
   - polymarket
 published: true
+author:
+  login: Vladimir
+  email: eremin.vladimir.d@gmail.com
+  display_name: Vladimir
+  first_name: ''
+  last_name: ''
 ---
 
 ## Maker-Taker Coin Game
