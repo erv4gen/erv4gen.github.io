@@ -13,3 +13,5 @@ _src/
 # Editor/Tool specific
 .ruby-lsp/
 .sass-cache/
+
+.obsidian
