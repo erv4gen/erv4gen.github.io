@@ -6,7 +6,7 @@ categories:
   - Finance
 tags:
   - statistics
-published: false
+published: true
 author:
 login: Vladimir
 email: eremin.vladimir.d@gmail.com
@@ -84,7 +84,7 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 1 in 100,000
 - 0.001% probability 
 - Someone in the city
-- Once in the lifetime 
+- Once in a lifetime 
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/03-thousand-to-hundredk.gif" alt="The card tower climbing past people and a 10-story building from 1 in 1,000 to 1 in 100,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
