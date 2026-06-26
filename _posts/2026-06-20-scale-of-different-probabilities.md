@@ -55,45 +55,45 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/01-ten-to-deck.gif" alt="A stack of cards growing from 1 in 10 to a full 52-card deck" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">Stack one card per "try": 1 in 10 grows into a full 52-card deck.</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">Stack of a 52-card deck.</figcaption>
 </figure>
 
 
 ### Ocassional Periodic Frequencies
-1 in 100 
+### 1 in 100 
 - 1% probability
 - Large lecture hall or company 
 - Event happens few times a year 
 
-1 in 500 
+### 1 in 500 
 - 0.2% probability
 - Event happens once a year
 - Four-of-a-kind hand in poker 
 
-1 in 1,000
+### 1 in 1,000
 - 0.1% probability 
 - Your small town neighborhood 
 - Happens once in few years 
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/02-deck-to-thousand.gif" alt="The card stack growing from one deck to a school-ruler-tall tower at 1 in 1,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">From one deck to a school ruler: 1 in 52 to 1 in 1,000.</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A pile of cards</figcaption>
 </figure>
 
 ### Rair and Unlikely Frequencies
 
-1 in 10,000
+### 1 in 10,000
 - 0.01% probability
 - Someone in a town 
 - Once every few decades 
 
 
-1 in 100,000
+### 1 in 100,000
 - 0.001% probability 
 - Someone in the small city 
 - Once in a lifetime 
 
-1 in 1,000,000
+### 1 in 1,000,000
 - 0.0001%
 - Someone in the big city 
 - Once in the several lifetimes
@@ -101,26 +101,26 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/03-thousand-to-million.gif" alt="The card tower climbing past people and buildings to the Eiffel Tower, from 1 in 1,000 to 1 in 1,000,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">Climbing past people and buildings to the Eiffel Tower: 1 in 1,000 to 1 in 1,000,000.</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of a cards</figcaption>
 </figure>
 
 
 ### Almost Impossible Frequencies
 
-1 in 10,000,000
+### 1 in 10,000,000
 - 0.000001%
 - Someone in the metro area
 - About the odds of winning a national lottery jackpot
 
 
-1 in 100,000,000
+### 1 in 100,000,000
 - 0.0000001%
 - Someone in the nation/country
 - Once in ..
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/04-million-to-hundredmillion.gif" alt="The card tower rising into the stratosphere from 1 in 1,000,000 to 1 in 100,000,000, about 30 km tall" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">Into the stratosphere: 1 in 1,000,000 to 1 in 100,000,000 &mdash; a tower of cards about 30 km tall.</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A mountain of a cards</figcaption>
 </figure> 
 
 
