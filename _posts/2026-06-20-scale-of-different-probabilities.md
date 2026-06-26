@@ -27,28 +27,29 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 ### Common Everyday Frequencies
 
-1 in 2
+#### 1 in 2
 - The starting point
 - 50% probability 
 - Coin Flip 
 
-1 in 3
+#### 1 in 3
 - 33% probability
 - 
-1 in 5 
+
+#### 1 in 5 
 - 20 % probability 
 - Roughly high card in poker 
 
-1 in 10
+#### 1 in 10
 - 10% probability 
 - A person in the meeting or friend group 
 - Event happening every couple of weeks
 
-1 in 20
+#### 1 in 20
 - 5% probability
 - Three-of-a-kind, straight in poker 
 
-1 in 50
+#### 1 in 50
 - 2% probability
 - Full house in poker 
 - Event happening every couple of month
@@ -60,17 +61,17 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 
 ### Ocassional Periodic Frequencies
-### 1 in 100 
+#### 1 in 100 
 - 1% probability
 - Large lecture hall or company 
 - Event happens few times a year 
 
-### 1 in 500 
+#### 1 in 500 
 - 0.2% probability
 - Event happens once a year
 - Four-of-a-kind hand in poker 
 
-### 1 in 1,000
+#### 1 in 1,000
 - 0.1% probability 
 - Your small town neighborhood 
 - Happens once in few years 
@@ -82,18 +83,18 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 ### Rair and Unlikely Frequencies
 
-### 1 in 10,000
+#### 1 in 10,000
 - 0.01% probability
 - Someone in a town 
 - Once every few decades 
 
 
-### 1 in 100,000
+#### 1 in 100,000
 - 0.001% probability 
 - Someone in the small city 
 - Once in a lifetime 
 
-### 1 in 1,000,000
+#### 1 in 1,000,000
 - 0.0001%
 - Someone in the big city 
 - Once in the several lifetimes
@@ -107,13 +108,13 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 ### Almost Impossible Frequencies
 
-### 1 in 10,000,000
+#### 1 in 10,000,000
 - 0.000001%
 - Someone in the metro area
 - About the odds of winning a national lottery jackpot
 
 
-### 1 in 100,000,000
+#### 1 in 100,000,000
 - 0.0000001%
 - Someone in the nation/country
 - Once in ..
