@@ -86,18 +86,18 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 #### 1 in 10,000
 - 0.01% probability
 - Someone in a town 
-- Once every few decades 
+- Several times in the lifetime
 
 
 #### 1 in 100,000
 - 0.001% probability 
 - Someone in the small city 
-- Once in a lifetime 
+- Once in the several lifetimes
 
 #### 1 in 1,000,000
 - 0.0001%
 - Someone in the big city 
-- Once in the several lifetimes
+- Once in the several millennia
 
 
 <figure style="margin:2rem auto;text-align:center">
