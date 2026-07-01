@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Orders of Magnitude of Probabilities.
+title: Orders of Magnitude of Probabilities
 date: 2026-06-20 00:00:00 +00:00
 categories:
   - Finance
@@ -16,7 +16,7 @@ author:
 ---
 ## Introduction 
 We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are *familiar*, meaning they are common enough not to be bothered to notice. We rarely see *unfamiliar* events; they are usually rare (for us). This is why humans are bad at distinguishing different orders of rarity. Not all “unlikely” things are the same.  
-More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like one in a million chance… We use it interchangeably and usually don’t give it much thought on how different these scales are.  
+More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like "one in a *million*" or "one in a *billion*" chance. We use it interchangeably and usually don’t give it much thought on how different these scales are.  
 This is the qualitative step between the two. Each additional zero represents a very different regime. Science calls it *orders of magnitude*.
 
 In this post, I want to show how different rare events are. In fact, they’re very different.  
@@ -34,16 +34,15 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 #### 1 in 3
 - 33% probability
-- 
 
 #### 1 in 5 
-- 20 % probability 
-- Roughly high card in poker 
+- 20% probability 
+- Roughly the odds of a high-card hand in poker
 
 #### 1 in 10
 - 10% probability 
 - A person in the meeting or friend group 
-- Event happening every couple of weeks
+- Event happens every couple of weeks
 
 #### 1 in 20
 - 5% probability
@@ -52,15 +51,15 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 #### 1 in 50
 - 2% probability
 - Full house in poker 
-- Event happening every couple of month
+- Event happens every couple of months
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/01-ten-to-deck.gif" alt="A stack of cards growing from 1 in 10 to a full 52-card deck" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">Stack of a 52-card deck.</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A stack of a 52-card deck.</figcaption>
 </figure>
 
 
-### Ocassional Periodic Frequencies
+### Occasional Periodic Frequencies
 #### 1 in 100 
 - 1% probability
 - Large lecture hall or company 
@@ -78,10 +77,10 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/02-deck-to-thousand.gif" alt="The card stack growing from one deck to a school-ruler-tall tower at 1 in 1,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A pile of cards</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A pile of cards.</figcaption>
 </figure>
 
-### Rair and Unlikely Frequencies
+### Rare and Unlikely Frequencies
 
 #### 1 in 10,000
 - 0.01% probability
@@ -103,10 +102,10 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/03-thousand-to-million.gif" alt="The card tower climbing past people and buildings to the Eiffel Tower, from 1 in 1,000 to 1 in 1,000,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of a cards</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of cards</figcaption>
 </figure>
 
-Beyond this point lie probabilities so small that they are best understood not through human lifetimes, but through the age of civilizations, geological epochs, or even the lifetime of the universe.
+Beyond this point lie probabilities so small that such an event wouldn't yet have occurred in the recorded history of human civilization, and measured in terms of geological epochs instead.
 
 
 ### Almost Impossible Frequencies
@@ -124,7 +123,7 @@ Beyond this point lie probabilities so small that they are best understood not t
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/04-million-to-hundredmillion.gif" alt="The card tower rising into the stratosphere from 1 in 1,000,000 to 1 in 100,000,000, about 30 km tall" style="width:100%;max-width:640px;height:auto;border-radius:6px">
-  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A mountain of a cards</figcaption>
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A mountain of cards</figcaption>
 </figure> 
 
 
@@ -133,6 +132,6 @@ Beyond this point lie probabilities so small that they are best understood not t
 
 This post is intended to show the difference between orders of magnitude and provide intuitive, visual support for each level. It suggests that orders of magnitude are a useful mental model for thinking about too-big or too-small numbers. 
 
-Our intuition evolved to reason about the events we are familiar with, events we encounter regularly. Our brains are, in fact, quite good at probabilistic thinking. I agree with [Derek](https://www.youtube.com/watch?v=R13BD8qKeTg) that we're intuitively good at Bayesian estimation. But once probabilities become sufficiently small, that intuition begins to fail. We don't have enough live encounters with one-in-a-thousand or one-in-a-million events to form a strong intuition.
+Our intuition evolved to reason about the events we are familiar with, events we encounter regularly. Our brains are, in fact, quite good at probabilistic thinking. I agree with [Derek](https://www.youtube.com/watch?v=R13BD8qKeTg) that we're intuitively good at Bayesian estimation. But once probabilities become sufficiently small, that intuition begins to fail. We don't have enough real-life encounters with one-in-a-thousand or one-in-a-million events to form a strong intuition.
 
 That's why we should think in orders of magnitude rather than plain numbers for very large or very small numbers, to help us replace loose ideas like "unlikely" or "rare" with a more precise mental model. This mental model is particularly strong when you need to judge probabilistic systems: poker hands, medical risks, and financial crises. Judging in orders of magnitude leads to better intuition and better decisions.
