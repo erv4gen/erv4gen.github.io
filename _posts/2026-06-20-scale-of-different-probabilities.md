@@ -125,12 +125,12 @@ Beyond this point lie probabilities so small that such an event wouldn't yet hav
 #### 1 in 10,000,000
 - 0.00001%
 - Someone in metro area
-- About the odds of winning a national lottery jackpot
-- Milankovitch geological cycle (Once every ~30k years)
+- Milankovitch geological cycle (Once every ~41k years)
 
 #### 1 in 100,000,000
 - 0.000001%
 - Someone in the nation/country
+- About the odds of winning a national lottery jackpot
 - Orbital eccentricity cycles (Once every ~400k years)
 
 <figure style="margin:2rem auto;text-align:center">
