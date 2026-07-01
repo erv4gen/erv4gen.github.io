@@ -36,7 +36,7 @@ Our starting point.
 #### 1 in 3
 - 33% probability
 - Someone in your immediate family
-
+- A random person having blue eyes
 #### 1 in 5 
 - 20% probability 
 - Roughly the odds of a high-card hand in poker
@@ -50,11 +50,15 @@ Our starting point.
 #### 1 in 20
 - 5% probability
 - Three-of-a-kind, straight in poker 
+- The p < 0.05 significance threshold in science
+- 4–5 heads in a row
 
 #### 1 in 50
 - 2% probability
-- Full house in poker 
 - Event happens every couple of months
+- Full house in poker 
+- A single birth being twins
+- 6 heads in a row
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/01-ten-to-deck.gif" alt="A stack of cards growing from 1 in 10 to a full 52-card deck" style="width:100%;max-width:640px;height:auto;border-radius:6px">
@@ -67,6 +71,7 @@ Our starting point.
 - 1% probability
 - Large lecture hall or company 
 - Event happens a few times a year 
+- 7 heads in a row
 
 #### 1 in 500 
 - 0.2% probability
@@ -77,6 +82,7 @@ Our starting point.
 - 0.1% probability 
 - Your small town neighborhood 
 - Happens once in few years 
+- 10 heads in a row
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/02-deck-to-thousand.gif" alt="The card stack growing from one deck to a school-ruler-tall tower at 1 in 1,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
@@ -89,19 +95,20 @@ Our starting point.
 - 0.01% probability
 - Someone in a town 
 - Several times in the lifetime
-
+- Guessing a 4-digit PIN on the first try
 
 #### 1 in 100,000
 - 0.001% probability 
 - Someone in the small city 
 - Once in the several lifetimes
+- A lifetime chance of being struck by lightning
 
 #### 1 in 1,000,000
 - 0.0001%
 - Someone in the big city 
 - Once in the several millennia
-
-
+- Being dealt a royal flush
+- 20 heads in a row
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/03-thousand-to-million.gif" alt="The card tower climbing past people and buildings to the Eiffel Tower, from 1 in 1,000 to 1 in 1,000,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
@@ -114,13 +121,13 @@ Beyond this point lie probabilities so small that such an event wouldn't yet hav
 ### Almost Impossible Frequencies
 
 #### 1 in 10,000,000
-- 0.000001%
+- 0.00001%
 - Someone in the metro area
 - About the odds of winning a national lottery jackpot
 - Milankovitch geological cycle (Once every ~30k years)
 
 #### 1 in 100,000,000
-- 0.0000001%
+- 0.000001%
 - Someone in the nation/country
 - Orbital eccentricity cycles (Once every ~400k years)
 
