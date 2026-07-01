@@ -6,7 +6,7 @@ categories:
   - Finance
 tags:
   - finance
-  - polymarket
+  - statistics
 published: true
 author:
   login: Vladimir
