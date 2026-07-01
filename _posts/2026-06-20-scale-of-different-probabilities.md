@@ -15,7 +15,7 @@ author:
   last_name: ""
 ---
 ## Introduction 
-We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are *familiar*, meaning they are common enough not to be bothered to notice. We rarely see *unfamiliar* events; they are usually rare (for us). This is why humans are bad at distinguishing different orders of rarity. Not all “unlikely” things are the same.  
+We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are *familiar*, meaning they are common enough that we don't bother to notice them. We rarely see *unfamiliar* events; they are usually rare (for us). This is why humans are bad at distinguishing different orders of rarity. Not all “unlikely” things are the same.  
 More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like "one in a *million*" or "one in a *billion*" chance. We use it interchangeably and usually don’t give it much thought on how different these scales are.  
 This is the qualitative step between the two. Each additional zero represents a very different regime. Science calls it *orders of magnitude*.
 
@@ -63,7 +63,7 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 #### 1 in 100 
 - 1% probability
 - Large lecture hall or company 
-- Event happens few times a year 
+- Event happens a few times a year 
 
 #### 1 in 500 
 - 0.2% probability
@@ -105,7 +105,7 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
   <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of cards</figcaption>
 </figure>
 
-Beyond this point lie probabilities so small that such an event wouldn't yet have occurred in the recorded history of human civilization, and measured in terms of geological epochs instead.
+Beyond this point lie probabilities so small that such an event wouldn't yet have occurred in the recorded history of human civilization, and would instead be measured in terms of geological epochs.
 
 
 ### Almost Impossible Frequencies
