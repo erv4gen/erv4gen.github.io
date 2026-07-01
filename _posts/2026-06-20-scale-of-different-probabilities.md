@@ -147,3 +147,14 @@ This post is intended to show the difference between orders of magnitude and pro
 Our intuition evolved to reason about the events we are familiar with, events we encounter regularly. Our brains are, in fact, quite good at probabilistic thinking. I agree with [Derek](https://www.youtube.com/watch?v=R13BD8qKeTg) that we're intuitively good at Bayesian estimation. But once probabilities become sufficiently small, that intuition begins to fail. We don't have enough real-life encounters with one-in-a-thousand or one-in-a-million events to form a strong intuition.
 
 That's why we should think in orders of magnitude rather than plain numbers for very large or very small numbers, to help us replace loose ideas like "unlikely" or "rare" with a more precise mental model. This mental model is particularly strong when you need to judge probabilistic systems: poker hands, medical risks, and financial crises. Judging in orders of magnitude leads to better intuition and better decisions.
+
+## References
+
+1. Left-handedness — Papadatou-Pastou et al., [Psychology Today, "The World's Biggest Study on Left-Handedness"](https://www.psychologytoday.com/us/blog/the-asymmetric-brain/202004/the-worlds-biggest-study-on-left-handedness)
+2. Blue eyes— [Medical News Today, "Eye colors: Most common and percentages"](https://www.medicalnewstoday.com/articles/eye-color-percentage)
+3. Fisher's original convention significance threshold. [Wikipedia, "p-value"](https://en.wikipedia.org/wiki/P-value); background: [Dallal, "Why P=0.05?"](http://www.jerrydallal.com/lhsp/p05.htm)
+4. Poker hand probabilities — [PokerNews, "Poker Hand Probabilities"](https://www.pokernews.com/poker-hands/probabilities.htm)
+5. Twin births — [CDC/NCHS FastStats, "Multiple Births"](https://www.cdc.gov/nchs/fastats/multiple.htm)
+6. Odds of being struck by lightning — [NOAA National Weather Service, "How Dangerous is Lightning?"](https://www.weather.gov/safety/lightning-odds)
+7. National lottery jackpot odds - [Mega Millions odds (1 in ~303M)](https://www.thelotter.us/mega-millions/odds/); [EuroMillions odds (1 in ~140M)](https://www.euro-millions.com/odds-of-winning)
+8. Milankovitch / orbital cycles — [NASA Science, "Milankovitch (Orbital) Cycles and Their Role in Earth's Climate"](https://science.nasa.gov/science-research/earth-science/milankovitch-orbital-cycles-and-their-role-in-earths-climate/)
