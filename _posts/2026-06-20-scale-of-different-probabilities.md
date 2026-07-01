@@ -28,12 +28,14 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 ### Common Everyday Frequencies
 
 #### 1 in 2
-- The starting point
+Our starting point.
+
 - 50% probability 
 - Coin Flip 
 
 #### 1 in 3
 - 33% probability
+- Someone in your immediate family
 
 #### 1 in 5 
 - 20% probability 
@@ -43,6 +45,7 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 - 10% probability 
 - A person in the meeting or friend group 
 - Event happens every couple of weeks
+- Being left-handed
 
 #### 1 in 20
 - 5% probability
