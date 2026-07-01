@@ -100,10 +100,13 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 - Once in the several millennia
 
 
+
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/03-thousand-to-million.gif" alt="The card tower climbing past people and buildings to the Eiffel Tower, from 1 in 1,000 to 1 in 1,000,000" style="width:100%;max-width:640px;height:auto;border-radius:6px">
   <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of a cards</figcaption>
 </figure>
+
+Beyond this point lie probabilities so small that they are best understood not through human lifetimes, but through the age of civilizations, geological epochs, or even the lifetime of the universe.
 
 
 ### Almost Impossible Frequencies
@@ -112,12 +115,12 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 - 0.000001%
 - Someone in the metro area
 - About the odds of winning a national lottery jackpot
-
+- Milankovitch geological cycle (Once every ~30k years)
 
 #### 1 in 100,000,000
 - 0.0000001%
 - Someone in the nation/country
-- Once in ..
+- Orbital eccentricity cycles (Once every ~400k years)
 
 <figure style="margin:2rem auto;text-align:center">
   <img src="{{site.baseurl}}/assets/2026/06/04-million-to-hundredmillion.gif" alt="The card tower rising into the stratosphere from 1 in 1,000,000 to 1 in 100,000,000, about 30 km tall" style="width:100%;max-width:640px;height:auto;border-radius:6px">
@@ -127,4 +130,9 @@ NOTE: Some examples that will be presented below are not exact probabilities; th
 
 
 ## Conclusion
-This post intended to be a visualization of the real difference between orders of magnitudes. 
+
+This post is intended to show the difference between orders of magnitude and provide intuitive, visual support for each level. It suggests that orders of magnitude are a useful mental model for thinking about too-big or too-small numbers. 
+
+Our intuition evolved to reason about the events we are familiar with, events we encounter regularly. Our brains are, in fact, quite good at probabilistic thinking. I agree with [Derek](https://www.youtube.com/watch?v=R13BD8qKeTg) that we're intuitively good at Bayesian estimation. But once probabilities become sufficiently small, that intuition begins to fail. We don't have enough live encounters with one-in-a-thousand or one-in-a-million events to form a strong intuition.
+
+That's why we should think in orders of magnitude rather than plain numbers for very large or very small numbers, to help us replace loose ideas like "unlikely" or "rare" with a more precise mental model. This mental model is particularly strong when you need to judge probabilistic systems: poker hands, medical risks, and financial crises. Judging in orders of magnitude leads to better intuition and better decisions.
