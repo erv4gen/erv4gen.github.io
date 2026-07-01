@@ -16,7 +16,7 @@ author:
 ---
 ## Introduction 
 We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are *familiar*, meaning they are common enough that we don't bother to notice them. We rarely see *unfamiliar* events; they are usually rare (for us). This is why humans are bad at distinguishing different orders of rarity. Not all “unlikely” things are the same.  
-More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like "one in a *million*" or "one in a *billion*" chance. We use it interchangeably and usually don’t give it much thought on how different these scales are.  
+More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like "one in a *million*" or "one in a *billion*" chance. We use these terms interchangeably and usually don’t give it much thought to how different these scales are.  
 This is the qualitative step between the two. Each additional zero represents a very different regime. Science calls it *orders of magnitude*.
 
 In this post, I want to show how different rare events are. In fact, they’re very different.  
@@ -36,10 +36,12 @@ Our starting point.
 #### 1 in 3
 - 33% probability
 - Someone in your immediate family
-- A random person having blue eyes
+
+
 #### 1 in 5 
 - 20% probability 
 - Roughly the odds of a high-card hand in poker
+- A random person having blue eyes
 
 #### 1 in 10
 - 10% probability 
@@ -81,7 +83,7 @@ Our starting point.
 #### 1 in 1,000
 - 0.1% probability 
 - Your small town neighborhood 
-- Happens once in few years 
+- Happens once in a few years 
 - 10 heads in a row
 
 <figure style="margin:2rem auto;text-align:center">
@@ -94,20 +96,20 @@ Our starting point.
 #### 1 in 10,000
 - 0.01% probability
 - Someone in a town 
-- Several times in the lifetime
+- Several times in lifetime
 - Guessing a 4-digit PIN on the first try
+- A lifetime chance of being struck by lightning
 
 #### 1 in 100,000
 - 0.001% probability 
-- Someone in the small city 
+- Someone in small city 
 - Once in the several lifetimes
-- A lifetime chance of being struck by lightning
+- Being dealt a royal flush
 
 #### 1 in 1,000,000
 - 0.0001%
-- Someone in the big city 
-- Once in the several millennia
-- Being dealt a royal flush
+- Someone in big city 
+- Once in several millennia
 - 20 heads in a row
 
 <figure style="margin:2rem auto;text-align:center">
@@ -122,7 +124,7 @@ Beyond this point lie probabilities so small that such an event wouldn't yet hav
 
 #### 1 in 10,000,000
 - 0.00001%
-- Someone in the metro area
+- Someone in metro area
 - About the odds of winning a national lottery jackpot
 - Milankovitch geological cycle (Once every ~30k years)
 
