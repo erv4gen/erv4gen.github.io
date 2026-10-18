@@ -15,3 +15,5 @@ _src/
 .sass-cache/
 
 .obsidian
+# Substack feed tool
+_tools/substack/node_modules/
