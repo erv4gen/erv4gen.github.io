@@ -16,3 +16,6 @@ title: Home
     </li>
   {% endfor %}
 </ul>
+
+## Subscribe
+{% include substack-subscribe.html %}

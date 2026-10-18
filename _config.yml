@@ -6,6 +6,7 @@ description: >
 # Basic GitHub Pages settings
 baseurl: "" # For user/organization pages like erv4gen.github.io
 url: "https://erv4gen.github.io" # Your site's full URL
+substack_url: "https://veremin.substack.com" # Used by _includes/substack-subscribe.html
 
 # Build settings
 markdown: kramdown
