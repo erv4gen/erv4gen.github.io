@@ -20,7 +20,7 @@ author:
 
 You're at the boring party looking for ways to kill time. You're with your friends Alice and Bob, and you invent a game that only requires a bag of coins and a little bit of math...
 
-![Maker-taker coin game]({{ site.baseurl }}/assets/2026/06/pasted-image-20260521211044.png)
+![Maker-taker coin game]({{ site.baseurl }}/assets/2026/06/coin-flip-p1.png)
 
  
 The setup is simple: 
