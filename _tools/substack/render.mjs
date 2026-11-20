@@ -21,7 +21,8 @@ let failed = 0;
 for (const { tex, display, out } of jobs) {
   try {
     const node = doc.convert(tex, { display, em: 16, ex: 8, containerWidth: 1200 });
-    const svg = adaptor.innerHTML(node);
+    // table rules (\hline) take their stroke from MathJax's CSS, which resvg never sees
+    const svg = adaptor.innerHTML(node).replace(/<line data-line/g, '<line stroke="black" stroke-width="40" data-line');
     if (svg.includes("data-mjx-error") || svg.includes('fill="red"')) throw new Error("TeX error");
     const png = new Resvg(svg, {
       fitTo: { mode: "zoom", value: 2.5 },

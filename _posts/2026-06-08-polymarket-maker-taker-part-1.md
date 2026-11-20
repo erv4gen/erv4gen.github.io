@@ -121,7 +121,7 @@ $$\mu - z_\alpha \cdot \frac{\sigma}{\sqrt{N_M}} > 0$$
 
 Solving for the minimum number of bets:
 
-$$\boxed{N_{\text{M}} > \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2}$$
+$$N_{\text{M}} > \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2$$
 
 Alice can use the formula above to determine how many bets she needs to place at a given edge $\alpha$ to lock the positive payoff. 
 

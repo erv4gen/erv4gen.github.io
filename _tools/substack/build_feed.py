@@ -7,6 +7,7 @@ Substack's importer has no math support, so:
   - display math (\\[...\\], $$...$$) becomes a PNG rendered by MathJax (render.mjs),
     hosted under /assets/substack-math/ and named by a hash of its TeX;
   - inline math (\\(...\\), $...$) becomes Unicode text, since Substack has no inline images;
+  - tables become PNGs too (a MathJax array), since the importer flattens <table> into one line;
   - relative and github.io URLs become absolute veremin.net URLs;
   - the script removes images that return 404, so Substack does not import empty boxes.
 
@@ -62,8 +63,10 @@ SYMBOLS = {
     "_": "_", "&": "&", ",": " ", ";": " ", ":": " ", "!": "", " ": " ", "quad": " ", "qquad": " ",
 }
 BLACKBOARD = {"E": "𝔼", "R": "ℝ", "N": "ℕ", "Z": "ℤ", "Q": "ℚ", "P": "ℙ", "C": "ℂ"}
-SUP = dict(zip("0123456789+-=()nikjtTxyabcde∗′", "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ⁿⁱᵏʲᵗᵀˣʸᵃᵇᶜᵈᵉ*′"))
+SUP = dict(zip("0123456789+-=()abcdefghijklmnoprstuvwxyzT∗′",
+               "⁰¹²³⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻᵀ*′"))
 SUB = dict(zip("0123456789+-=()aeoxhklmnpstijruv", "₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎ₐₑₒₓₕₖₗₘₙₚₛₜᵢⱼᵣᵤᵥ"))
+SUB[","] = SUP[","] = ","  # S_{n,i} reads as Sₙ,ᵢ
 ACCENTS = {"hat": "̂", "widehat": "̂", "bar": "̄", "tilde": "̃",
            "widetilde": "̃", "overline": "̅"}  # combining characters
 CALLIGRAPHIC = {"B": "ℬ", "L": "ℒ", "N": "𝒩", "F": "ℱ", "H": "ℋ", "M": "ℳ", "E": "ℰ", "P": "𝒫"}
@@ -140,6 +143,7 @@ def tex_to_unicode(tex):
             out.append(c)
             i += 1
     text = re.sub(r"\s+", " ", "".join(out)).strip()
+    text = re.sub(r"([{(\[]) | ([})\]])", r"\1\2", text)  # "\left\{ S\right\}" -> "{S}"
     return text, clean
 
 
@@ -152,18 +156,19 @@ class Converter:
     def __init__(self):
         self.jobs, self.residue, self.inline_count, self.display_count = {}, [], 0, 0
 
-    def display(self, tex):
-        tex = html.unescape(tex).strip()
+    def display(self, tex, alt=None):
+        # WordPress-era posts carry <br> tags inside the TeX; MathJax on the site skips them
+        tex = re.sub(r"<br\s*/?>", " ", html.unescape(tex)).strip()
         digest = hashlib.sha1(tex.encode()).hexdigest()[:12]
         out = MATH_DIR / f"{digest}.png"
         # a bare # is a TeX error; MathJax 2 on the site tolerates it, MathJax 3 does not
         self.jobs[digest] = {"tex": re.sub(r"(?<!\\)#", r"\\#", tex), "display": True, "out": str(out)}
         self.display_count += 1
-        alt = html.escape(tex, quote=True)
+        alt = html.escape(alt or tex, quote=True)
         return f'<img src="{SITE}/assets/substack-math/{digest}.png" alt="{alt}" />'
 
     def inline(self, tex, post):
-        tex = html.unescape(tex)
+        tex = re.sub(r"<br\s*/?>", " ", html.unescape(tex))
         if re.search(r"\\begin|\\choose|\\binom", tex):
             # no readable one-line text form; show it as an equation image on its own line
             return self.display(html.escape(tex, quote=False))
@@ -187,7 +192,41 @@ class Converter:
         # MathJax accepts "$ k$" with inner spaces, so this does too; prices are left alone
         return re.sub(r"(?<![\\$])\$([^$<>]+?)\$(?!\d)", single, chunk)
 
+    def table(self, m):
+        """Render an HTML table as a MathJax array image; cells keep their $...$ math."""
+        rows = [[html.unescape(re.sub(r"<[^>]+>", "", c)).strip()
+                 for c in re.findall(r"<t[hd]\b[^>]*>(.*?)</t[hd]>", tr, flags=re.S | re.I)]
+                for tr in re.findall(r"<tr\b[^>]*>(.*?)</tr>", m.group(0), flags=re.S | re.I)]
+        rows = [r for r in rows if any(r)]  # WordPress tables often have an empty header row
+        if not rows:
+            return ""
+        width = max(map(len, rows))
+        rows = [r + [""] * (width - len(r)) for r in rows]
+        keep = [j for j in range(width) if any(r[j] for r in rows)]
+        rows = [[r[j] for j in keep] for r in rows]
+
+        greek = {v: k for k, v in SYMBOLS.items() if k.isalpha() and "\u0370" <= v <= "\u03ff"}
+
+        def cell(c, bold):
+            out = []
+            for k, part in enumerate(re.split(r"\$([^$]+)\$", c)):
+                if k % 2:
+                    # the MathJax SVG font has no glyph for a literal σ; \sigma it does
+                    out.append("".join(rf"\{greek[ch]} " if ch in greek else ch for ch in part))
+                elif part.strip():
+                    text = re.sub(r"([\\{}_%&#$^~])", lambda x: {"\\": r"\textbackslash{}", "^": r"\^{}",
+                                                                 "~": r"\~{}"}.get(x.group(1), "\\" + x.group(1)), part)
+                    out.append(rf"\textbf{{{text}}}" if bold else rf"\text{{{text}}}")
+            return " ".join(out)
+
+        lines = [" & ".join(cell(c, i == 0) for c in r) for i, r in enumerate(rows)]
+        tex = (r"\begin{array}{" + "l" * len(keep) + "}" + lines[0] + r" \\ \hline "
+               + r" \\ ".join(lines[1:]) + r"\end{array}")
+        alt = "; ".join(", ".join(re.sub(r"\$", "", c) for c in r) for r in rows)
+        return "<p>" + self.display(html.escape(tex, quote=False), alt=alt) + "</p>"
+
     def content(self, body, post):
+        body = re.sub(r"<table\b.*?</table>", self.table, body, flags=re.S | re.I)
         # leave <pre>/<code> untouched
         parts = re.split(r"(<pre\b.*?</pre>|<code\b.*?</code>)", body, flags=re.S | re.I)
         return "".join(p if i % 2 else self.math(p, post) for i, p in enumerate(parts))
