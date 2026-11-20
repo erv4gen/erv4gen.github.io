@@ -20,7 +20,7 @@ gem "open_uri_redirections" # Dependency for jekyll-import's WordPress importer
 # Optional, but common and supported GitHub Pages plugins:
 gem "jekyll-feed", "~> 0.17.0" # For an RSS feed
 # gem "jekyll-seo-tag", "~> 2.8.0" # For SEO meta tags
-# gem "jekyll-sitemap", "~> 1.4.0" # For sitemap.xml
+gem "jekyll-sitemap", "~> 1.4.0" # For sitemap.xml
 gem "jekyll-archives", "~> 2.2.1" # For tag and category archive pages
 
 # If you plan to use jekyll-seo-tag or jekyll-feed, uncomment them
