@@ -897,7 +897,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>For instance, with collaborative filtering, a most popular method typically used by recommender systems, users are matched based on their past behaviors or ratings. A user may be recommended a movie that other similar users have enjoyed.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:image --></p>
-<figure class="wp-block-image"></figure>
+<figure class="wp-block-image"><img alt="User preferences represented as food and drink choices" src="https://veremin.net/assets/2023/10/multi-armed_bandits_1.jpg" /></figure>
 <p><!-- /wp:image --></p>
 <p><!-- wp:paragraph --></p>
 <p>Meanwhile, item-based similarity approaches would recommend items that are similar to ones the user has previously interacted with or rated highly. For instance, if a user liked a certain science fiction book, they would be recommended other books in the same genre or by the same author.</p>
@@ -1142,10 +1142,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>Armed with this data, the shopkeeper dusted off his seldom-used laptop and entered these records into a Jupyter Notebook to analyze and visualize the results. His analysis culminated in a series of animated plots demonstrating the convergence of the Beta distribution for each individual over time.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:image {"align":"center","id":9471,"sizeSlug":"full","linkDestination":"none"} --></p>
-<figure class="wp-block-image aligncenter size-full"><img alt="" class="wp-image-9471" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-1.gif" /></figure>
-<p><!-- /wp:image --></p>
-<p><!-- wp:image {"sizeSlug":"large"} --></p>
-<figure class="wp-block-image size-large"><img alt="" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-1.gif" /></figure>
+<figure class="wp-block-image aligncenter size-full"><img alt="Animated plot of the Beta distribution converging for customer 1" class="wp-image-9471" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-1.gif" /></figure>
 <p><!-- /wp:image --></p>
 <p><!-- wp:list --></p>
 <ul>
@@ -1155,7 +1152,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 </ul>
 <p><!-- /wp:list --></p>
 <p><!-- wp:image {"sizeSlug":"large"} --></p>
-<figure class="wp-block-image size-large"><img alt="" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-2-1.gif" /></figure>
+<figure class="wp-block-image size-large"><img alt="Animated plot of the Beta distribution converging for customer 2" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-2-1.gif" /></figure>
 <p><!-- /wp:image --></p>
 <p><!-- wp:list --></p>
 <ul>
@@ -1165,7 +1162,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 </ul>
 <p><!-- /wp:list --></p>
 <p><!-- wp:image {"sizeSlug":"large"} --></p>
-<figure class="wp-block-image size-large"><img alt="" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-2-1.gif" /></figure>
+<figure class="wp-block-image size-large"><img alt="Animated plot of the Beta distribution converging for customer 3" src="https://veremin.net/assets/2023/10/Multi-armed-bandits-results-3.gif" /></figure>
 <p><!-- /wp:image --></p>
 <p><!-- wp:list --></p>
 <ul>
