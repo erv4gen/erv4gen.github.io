@@ -35,6 +35,13 @@ OLD_SITE = "https://erv4gen.github.io"
 REPO = Path(__file__).resolve().parents[2]
 MATH_DIR = REPO / "assets" / "substack-math"
 OUT = REPO / "substack.xml"
+# posts left out of the Substack import, by their veremin.net URL
+EXCLUDE = {
+    f"{SITE}/my-experiments-with-an-ai-assistant-or-how-not-to-search-for-shows-in-nyc/",
+    f"{SITE}/introducing-wadset-the-building-block-of-defi/",
+    f"{SITE}/what-is-liquidity-management-2/",
+    f"{SITE}/optimizing-risks-for-a-portfolio-of-cryptocurrencies-2/",
+}
 
 SYMBOLS = {
     "alpha": "α", "beta": "β", "gamma": "γ", "delta": "δ", "epsilon": "ε", "varepsilon": "ε",
@@ -226,6 +233,8 @@ def main():
     items = []
     for e in feed.entries:
         link = e.link.replace(OLD_SITE, SITE)
+        if link in EXCLUDE:
+            continue
         body = absolutize(e.content[0].value)
         body = conv.content(body, e.title)
         body = drop_dead_images(body, client, e.title, dropped)
