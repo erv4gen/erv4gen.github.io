@@ -17,3 +17,4 @@ _src/
 .obsidian
 # Substack feed tool
 _tools/substack/node_modules/
+_tools/substack/__pycache__/
