@@ -209,33 +209,7 @@ If the coin were a fair coin with a probability of head is ~50%, then it is obvi
 
 <p>Let’s call  K the price Alice will pay to contribute to the game. Bob will pay (1-K) respectively.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Outcome</th>
-      <th>Probability</th>
-      <th>Alice Profit</th>
-      <th>Bob Profit</th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Heads</td>
-      <td>p</td>
-      <td>1-K</td>
-      <td>-(1-K)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Tails</td>
-      <td>1-p</td>
-      <td>-K</td>
-      <td>K</td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<p><img src="https://veremin.net/assets/substack-math/b01f2d40922c.png" alt="Outcome, Probability, Alice Profit, Bob Profit; Heads, p, 1-K, -(1-K); Tails, 1-p, -K, K" /></p>
 
 <p>Alice’s expected value is: 
 EV_Alice = p(1 - K) + (1-p)(-K) = p - K</p>
@@ -276,36 +250,7 @@ For a head bet at price K her profit X takes values (1-K) with probability p and
 
 <img src="https://veremin.net/assets/substack-math/8b60e798dca6.png" alt="\text{Var}(X) = \text{Var}(Y - K) = \text{Var}(Y) = p(1-p)" />
 
-<table>
-  <thead>
-    <tr>
-      <th>Region</th>
-      <th>K</th>
-      <th>p</th>
-      <th>σ = √(p(1-p))</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Longshots</td>
-      <td>0.10</td>
-      <td>0.07</td>
-      <td>0.26</td>
-    </tr>
-    <tr>
-      <td>Mid-range</td>
-      <td>0.50</td>
-      <td>0.47</td>
-      <td>0.50</td>
-    </tr>
-    <tr>
-      <td>Favorites</td>
-      <td>0.90</td>
-      <td>0.93</td>
-      <td>0.26</td>
-    </tr>
-  </tbody>
-</table>
+<p><img src="https://veremin.net/assets/substack-math/b50d8cbb6c35.png" alt="Region, K, p, σ = \sqrt{p(1-p)}; Longshots, 0.10, 0.07, 0.26; Mid-range, 0.50, 0.47, 0.50; Favorites, 0.90, 0.93, 0.26" /></p>
 
 <p>Variance peaks at p ≈ 0.5 and is lowest in the tails. Alice knows that she takes different risk for different types of coins - risk is almost twice as large near K~0.5 compare with the low/high ends of the range.</p>
 
@@ -344,7 +289,7 @@ For that to happen, she wants to have an answer for the following an important q
 
 <p>Solving for the minimum number of bets:</p>
 
-<img src="https://veremin.net/assets/substack-math/4cf6558ca359.png" alt="\boxed{N_{\text{M}} &gt; \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2}" />
+<img src="https://veremin.net/assets/substack-math/7a93665318c9.png" alt="N_{\text{M}} &gt; \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2" />
 
 <p>Alice can use the formula above to determine how many bets she needs to place at a given edge α to lock the positive payoff.</p>
 
@@ -692,20 +637,22 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>Even though the number of trajectories gives us a clue about the likelihood of ending up exactly m steps from the origin, it's still challenging to compare different outcomes. This difficulty arises because the number of trajectories increases with n. We need a factor that is also a function of n, but in the opposite way, so that the measure of likelihood be in the same scale disregard of the n.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Let's start by rearranging back all trajectories { S}ₙ that results at m by sorting by outcome<br /> S_(n,i) = X₀ + X₁ + ⋯ + Xₙ ⇾<br /> ⇾ Sₙ^sorted = sort(S_(n,i))= X₀⁺ + X₁⁺ + ⋯ + Xₖ⁺ ⋯ X₀⁻ + X₁⁻ + ⋯ + Xₙ₋ₖ⁻</p>
+<p>Let's start by rearranging back all trajectories {S}ₙ that results at m by sorting by outcome:</p>
+<p><img src="https://veremin.net/assets/substack-math/d1bec7101fa8.png" alt="S_{n,i} = X_0 + X_1 + \cdots + X_n \;\Rightarrow" /></p>
+<p><img src="https://veremin.net/assets/substack-math/168d4ae5914f.png" alt="\Rightarrow S_n^{\text{sorted}} = \text{sort}(S_{n,i})= X_0^{+} + X_1^{+} + \cdots + X_k^{+} \cdots X_0^{-} + X_1^{-} + \cdots + X_{n-k}^{-}" /></p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>S_(n,i) represents a specific permutation of the random walk after n steps. </li>
+<li>Sₙ,ᵢ represents a specific permutation of the random walk after n steps. </li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>Sₙ^sorted​ reflects the sorted, common form of any permutation  of Sₙ</li>
+<li>Sₙˢᵒʳᵗᵉᵈ​ reflects the sorted, common form of any permutation  of Sₙ</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
 <p><!-- wp:paragraph --></p>
-<p>Now, let's answer the question "How likely you can see a row of [ X⁺=+1] k times in the row followed by a series of [ X⁻=-1 ] (n-k) times straight".<br /> Since we're dealing with a symmetric random walk and P(X⁺)= P(X⁻)=1/2, it'll be:<br /> <img src="https://veremin.net/assets/substack-math/34fc11c9ba02.png" alt="(\frac{1}{2})^k \times (\frac{1}{2})^{n-k}=(\frac{1}{2})^{n}" /><br />You can see that this scaling factor is exactly what we're looking for since it scales down with  n balancing out our combinatorial part.  By putting it all together, we can finally derive the Probability Mass Function (PMF) for a simply symmetric random walk:</p>
+<p>Now, let's answer the question "How likely you can see a row of [X⁺=+1] k times in the row followed by a series of [X⁻=-1] (n-k) times straight".<br /> Since we're dealing with a symmetric random walk and P(X⁺)= P(X⁻)=1/2, it'll be:<br /> <img src="https://veremin.net/assets/substack-math/34fc11c9ba02.png" alt="(\frac{1}{2})^k \times (\frac{1}{2})^{n-k}=(\frac{1}{2})^{n}" /><br />You can see that this scaling factor is exactly what we're looking for since it scales down with  n balancing out our combinatorial part.  By putting it all together, we can finally derive the Probability Mass Function (PMF) for a simply symmetric random walk:</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p><img src="https://veremin.net/assets/substack-math/1eed17dae4bc.png" alt="P(m|n) = {n  \choose k}p^{n-k}(1-p)^k={n  \choose \frac{m+n}{2}}p^n" /></p>
@@ -733,7 +680,6 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>The versatility of a symmetric random walk allows for modifications and adaptations that can tackle more specific and complex scenarios. For instance, introducing asymmetry or additional constraints can simulate more realistic conditions in various fields.<br /> Its ability to model a wide range of real-world systems underlines the importance of probabilistic thinking and statistical principles in understanding our world.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:shortcode --><br />
-[mathjax]<br />
 <!-- /wp:shortcode --><br />
 </body></html></p>]]></content:encoded>
     </item>
@@ -831,13 +777,13 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>The numbers in the triangle now take on a new meaning: they quantify the various paths available for a walker to reach a certain location. For instance, in the illustrated graph, one can discern that there are ten separate paths leading to a chosen point, achievable within five steps.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>Noticing the triangular shape, where the base grows linearly, it's logical to deduce that the overall extent of the walk also increases in a linear fashion. Interestingly, this is mirrored in the variance, which accumulates steadily, at a rate of one unit per time period:<br /><img src="https://veremin.net/assets/substack-math/3174c301677e.png" alt="\text{VAR}(S_n)=n" /><br />Where:<br /><img src="https://veremin.net/assets/substack-math/71f18d6e373d.png" alt="&lt;br /&gt;\begin{align}&lt;br /&gt;S_n = \sum_{i=1}^nX_i \\&lt;br /&gt;X = \begin{cases} +1 &amp;\text{with probability} \frac{1}{2}, \\ -1 &amp; \text{with probability} \frac{1}{2},  \end{cases}&lt;br /&gt;\end{align}&lt;br /&gt;" /></p>
+<p>Noticing the triangular shape, where the base grows linearly, it's logical to deduce that the overall extent of the walk also increases in a linear fashion. Interestingly, this is mirrored in the variance, which accumulates steadily, at a rate of one unit per time period:<br /><img src="https://veremin.net/assets/substack-math/3174c301677e.png" alt="\text{VAR}(S_n)=n" /><br />Where:<br /><img src="https://veremin.net/assets/substack-math/d1e6ed1e7843.png" alt="\begin{align} S_n = \sum_{i=1}^nX_i \\ X = \begin{cases} +1 &amp;\text{with probability} \frac{1}{2}, \\ -1 &amp; \text{with probability} \frac{1}{2},  \end{cases} \end{align}" /></p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>The logic becomes evident when considering the possibility of a direct path along the triangle's edge – such as consistently moving left. In this scenario, after n steps of this linear trajectory, you would be exactly n steps from the starting point, a principle that applies to both directions. However, these straight paths are not common. Instead, our primary focus is on identifying the most likely outcomes. The triangle is useful in this regard too. By noting where the highest numbers accumulate, we can ascertain that they are generally close to the center and, importantly, they tend to cluster together!</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p>To mathematically derive the measure of "average spread", let's recall that we have already established the variance of our random walk, (VAR(Sₙ) = n). The "average spread", standard deviation, is defined as the square root of the variance. Hence, for our random walk, the standard deviation, denoted as (σ), is given by: [ σ(Sₙ) = √(VAR(Sₙ)) = √n ] But why the square root? The square root is used because variance is calculated <em>by squaring the deviations from the mean</em>. This squaring process has a side effect of magnifying larger deviations. Therefore, to bring our units back to the original scale (as in our random walk), we take the square root of the variance.</p>
+<p>To mathematically derive the measure of "average spread", let's recall that we have already established the variance of our random walk, (VAR(Sₙ) = n). The "average spread", standard deviation, is defined as the square root of the variance. Hence, for our random walk, the standard deviation, denoted as (σ), is given by: <img src="https://veremin.net/assets/substack-math/233d57746967.png" alt="\sigma(S_n) = \sqrt{\text{VAR}(S_n)} = \sqrt{n}" /> But why the square root? The square root is used because variance is calculated <em>by squaring the deviations from the mean</em>. This squaring process has a side effect of magnifying larger deviations. Therefore, to bring our units back to the original scale (as in our random walk), we take the square root of the variance.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>Plugging the doctor-recommended walk n=10,000<br /><img src="https://veremin.net/assets/substack-math/8714da30ec72.png" alt="\sigma = \sqrt{n \text{VAR}(X)}=\sqrt{ 10,000}" /><br />We get σ=100, which align with your observations. It tells you how far from the mean (origin) you should expect to deviate.</p>
@@ -1038,7 +984,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p>With a clear strategy in mind, the shopkeeper set forth on a two-month experiment. Each day, he displayed a distinct offer (or no offer at all) to each of the three individuals, and meticulously recorded the outcome or "reward" (R) as either a conversion (1) or non-conversion (0):</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
-<p><img src="https://veremin.net/assets/substack-math/48a499f6d799.png" alt="R_{t,i,a} =&lt;br /&gt;\begin{cases}&lt;br /&gt;1 &amp; \text{if conversion} \\&lt;br /&gt;0 &amp; \text{if non-conversion}&lt;br /&gt;\end{cases}" /></p>
+<p><img src="https://veremin.net/assets/substack-math/49a7a555988d.png" alt="R_{t,i,a} = \begin{cases} 1 &amp; \text{if conversion} \\ 0 &amp; \text{if non-conversion} \end{cases}" /></p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>In this formula, t denotes the time step or day index, i signifies the person, and a indicates the offer index.</p>
@@ -1049,15 +995,15 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p><!-- wp:list --></p>
 <ul>
 <!-- wp:list-item --></p>
-<li>α_(t,i,a) := α_(t-1,i,a) + R_(t,i,a) (representing the number of successes)</li>
+<li>αₜ,ᵢ,ₐ := αₜ₋₁,ᵢ,ₐ + Rₜ,ᵢ,ₐ (representing the number of successes)</li>
 <p><!-- /wp:list-item --></p>
 <p><!-- wp:list-item --></p>
-<li>β_(t,i,a) := β_(t-1,i,a) + (1 - R_(t,i,a)) (representing the number of failures)</li>
+<li>βₜ,ᵢ,ₐ := βₜ₋₁,ᵢ,ₐ + (1 - Rₜ,ᵢ,ₐ) (representing the number of failures)</li>
 <p><!-- /wp:list-item -->
 </ul>
 <p><!-- /wp:list --></p>
 <p><!-- wp:paragraph --></p>
-<p>Here, α_(t,i,a) and β_(t,i,a) denote the parameters of the Beta distribution for person i, action a at time step t.</p>
+<p>Here, αₜ,ᵢ,ₐ and βₜ,ᵢ,ₐ denote the parameters of the Beta distribution for person i, action a at time step t.</p>
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:paragraph --></p>
 <p>These updates provided the shopkeeper an estimated conversion probability Pᵢ(X|a) for each individual and offer. This probability followed a Beta distribution:</p>
@@ -1079,60 +1025,7 @@ For Bob, the more he’s in the market, the greater the chance he’ll deplete h
 <p><!-- /wp:paragraph --></p>
 <p><!-- wp:table --></p>
 <figure class="wp-block-table">
-<table>
-<thead>
-<tr>
-<th> </th>
-<th> </th>
-<th> </th>
-<th> </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>customer_id</td>
-<td>day_index</td>
-<td>offer_index</td>
-<td>success</td>
-</tr>
-<tr>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>1</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>2</td>
-<td>0</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>0</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-</tr>
-<tr>
-<td>2</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-</tbody>
-</table>
+<p><img src="https://veremin.net/assets/substack-math/a948bdb94b2e.png" alt="customer_id, day_index, offer_index, success; 0, 0, 0, 0; 1, 0, 0, 0; 2, 0, 0, 1; 0, 1, 1, 0; 1, 1, 1, 0; 2, 1, 1, 1" /></p>
 </figure>
 <p><!-- /wp:table --></p>
 <p><!-- wp:paragraph --></p>
