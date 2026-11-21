@@ -10,6 +10,11 @@ body {
   background-color: #FAF9F6; /* soft off-white (active) — subtlest, nearly neutral */
   /* background-color: #FBF8F1; */ /* warm cream paper — softer, cozier */
   /* background-color: #F7F2E7; */ /* light sepia      — warmest, Kindle-inspired */
+  color: #333;
+  font-size: 16px; /* the theme sets 14px */
+  line-height: 1.6;
+  margin: 0;
+  padding: 0; /* the theme pads the body by 50px; .site sets the page margins */
 }
 
 /* ---- Color overrides: blue -> black/grey ---- */
@@ -17,25 +22,140 @@ body {
 /* Primary: links */
 a {
   color: #333;
+  text-decoration: none;
 }
 
 /* Secondary: link hover / focus */
 a:hover,
 a:focus {
   color: #000;
+  font-weight: inherit; /* the theme bolds links on hover */
+  text-decoration: underline;
 }
 
-/* ---- Layout: widen the content & reduce the empty left space ---- */
-/* Wide screens only — leaves the mobile single-column layout untouched. */
-@media print, screen and (min-width: 961px) {
-  .wrapper {
-    width: 1080px;
+li::marker {
+  color: #999;
+}
+
+/* ---- Page frame (see _layouts/default.html) ---- */
+/* Sidebar with title, tagline and menu; one content column next to it.
+   Section lines are dashed, like a typewritten page. */
+$rule: 1px dashed #CFC8BA;
+
+.site {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 64px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+}
+
+.side {
+  flex: 0 0 260px;
+  max-width: 100%;
+}
+
+/* The sidebar stays put while the content scrolls; on phones the columns
+   stack and it scrolls away normally. */
+@media (min-width: 760px) {
+  .side {
+    position: sticky;
+    top: 64px;
+    align-self: flex-start;
   }
-  header,
-  footer {
-    width: 260px;
-  }
-  section {
-    width: 760px;
-  }
+}
+
+.site-title {
+  margin: 0 0 12px;
+  font-size: 32px;
+  line-height: 1.2;
+  color: #222;
+}
+
+.site-title a,
+.site-title a:hover {
+  color: #222;
+  text-decoration: none;
+}
+
+.tagline {
+  margin: 0 0 14px;
+  color: #666;
+}
+
+hr.rule {
+  height: 0;
+  background: none;
+  border: 0;
+  border-top: $rule;
+  margin: 0 0 14px;
+}
+
+.menu a {
+  display: block;
+}
+
+.menu a[aria-current="page"] {
+  color: #000;
+  font-weight: 700;
+}
+
+.side .fine {
+  margin: 24px 0 0;
+  font-size: 13px;
+}
+
+.side .fine a {
+  color: #8A857B;
+}
+
+.content {
+  flex: 1 1 480px;
+  min-width: 0;
+}
+
+/* ---- Headings that open a section: home topics, About, tag pages ---- */
+.section-title,
+.page-title {
+  margin: 0 0 8px;
+  padding-bottom: 4px;
+  border-bottom: $rule;
+  line-height: 27px;
+  color: #222;
+}
+
+.section-title {
+  font-size: 17px;
+}
+
+.page-title {
+  font-size: 22px;
+}
+
+.section-title .more,
+.page-title .more {
+  margin-left: 6px;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1;
+  color: #666;
+}
+
+/* ---- Post lists ---- */
+ul.post-list {
+  margin: 0 0 20px;
+  padding-left: 22px;
+}
+
+ul.post-list .date {
+  color: #666;
+}
+
+/* Tag pages list every post, so the titles get a little more room. */
+ul.post-list.full {
+  margin-bottom: 32px;
+  font-size: 17.5px;
+  line-height: 1.75;
 }

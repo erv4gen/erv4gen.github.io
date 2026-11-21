@@ -1,0 +1,29 @@
+---
+layout: default
+title: Home
+---
+{%- comment -%}
+  Topics come from post tags, biggest topic first (ties alphabetical), each with
+  its 3 newest posts. Nothing here names a topic: a new tag shows up on its own.
+  Sort key: (10000 - post count) padded, then the name, so a plain sort orders them.
+{%- endcomment -%}
+{%- assign keys = "" -%}
+{%- for tag in site.tags -%}
+  {%- assign rank = 10000 | minus: tag[1].size -%}
+  {%- assign keys = keys | append: rank | append: "|" | append: tag[0] | append: "##" -%}
+{%- endfor -%}
+{%- assign keys = keys | split: "##" | sort -%}
+{%- for key in keys -%}
+  {%- assign name = key | split: "|" | last -%}
+  {%- assign slug = name | slugify -%}
+  {%- assign tag_posts = site.tags[name] %}
+<h3 class="section-title">{{ name | capitalize }} <a class="more" href="{{ "/tag/" | append: slug | append: "/" | relative_url }}">all {{ tag_posts.size }} &#8594;</a></h3>
+<ul class="post-list">
+  {%- for post in tag_posts limit: 3 %}
+  <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a> <span class="date">- {{ post.date | date: "%B %-d, %Y" }}</span></li>
+  {%- endfor %}
+</ul>
+{%- endfor %}
+
+<h2 class="page-title">Subscribe</h2>
+{% include substack-subscribe.html %}

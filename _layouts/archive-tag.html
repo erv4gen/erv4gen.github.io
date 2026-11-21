@@ -1,29 +1,18 @@
 ---
 layout: default
 ---
-
-<article class="page">
-  <h1 class="page-title">Posts tagged "{{ page.tag | default: page.title | escape }}"</h1>
-  <div class="page-content">
-    {%- assign tag_posts = site.tags[page.tag] | default: page.posts -%}
-    {%- if tag_posts.size > 0 -%}
-      <ul class="post-list">
-        {%- for post in tag_posts -%}
-          <li>
-            <h3>
-              <a class="post-link" href="{{ post.url | relative_url }}">
-                {{ post.title | escape }}
-              </a>
-            </h3>
-            <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
-            {%- if post.excerpt -%}
-              <p>{{ post.excerpt | strip_html | truncatewords: 50 }}</p>
-            {%- endif -%}
-          </li>
-        {%- endfor -%}
-      </ul>
-    {%- else -%}
-      <p>No posts found for this tag.</p>
-    {%- endif -%}
-  </div>
-</article>
+{%- comment -%}
+  One page per topic. GitHub Pages can't generate these, so each tag needs a stub
+  in tag/ (layout: archive-tag, tag: <name>, permalink: /tag/<slug>/).
+{%- endcomment -%}
+{%- assign tag_posts = site.tags[page.tag] | default: page.posts -%}
+<h2 class="page-title">{{ page.tag | default: page.title | capitalize | escape }} <span class="more">{{ tag_posts.size }} {% if tag_posts.size == 1 %}post{% else %}posts{% endif %}</span></h2>
+{%- if tag_posts.size > 0 %}
+<ul class="post-list full">
+  {%- for post in tag_posts %}
+  <li><a href="{{ post.url | relative_url }}">{{ post.title | escape }}</a> <span class="date">- {{ post.date | date: "%B %-d, %Y" }}</span></li>
+  {%- endfor %}
+</ul>
+{%- else %}
+<p>No posts found for this tag.</p>
+{%- endif %}
