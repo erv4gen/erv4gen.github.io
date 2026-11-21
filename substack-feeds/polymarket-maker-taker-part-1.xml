@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Vova’s Blog</title>
+    <link>https://veremin.net/</link>
+    <description>I write about machine learning and finance</description>
+    <item>
+      <title>The Maker-Taker Coin Game: A Statistical Look at Prediction Market Pricing Part 1</title>
+      <link>https://veremin.net/finance/2026/06/08/polymarket-maker-taker-part-1.html</link>
+      <guid isPermaLink="true">https://veremin.net/finance/2026/06/08/polymarket-maker-taker-part-1.html</guid>
+      <pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate>
+      <description><![CDATA[Maker-Taker Coin Game You’re at the boring party looking for ways to kill time. You’re with your friends Alice and Bob, and you invent a game that only requires a bag of coins and a little bit of math… The setup is simple: You have a bag of n coins and all of them are weighted.…]]></description>
+      <content:encoded><![CDATA[<h2 id="maker-taker-coin-game">Maker-Taker Coin Game</h2>
+
+<p>You’re at the boring party looking for ways to kill time. You’re with your friends Alice and Bob, and you invent a game that only requires a bag of coins and a little bit of math…</p>
+
+<p><img alt="Maker-taker coin game" src="https://veremin.net/assets/2026/06/coin-flip-p1.png" /></p>
+
+<p>The setup is simple:</p>
+
+<p>You have a bag of n coins and all of them are weighted. Only you know the true probability p of each coin landing heads, but Alice and Bob do not. Alice picks head, Bob picks tail. You’ll flip each coin once, for a total of n flips. On each flip Alice and Bob jointly contribute some amount to the bank total to $1. They need to agree on the contribution split, i.e. what portion pays Alice and what Bob.</p>
+
+<p>Alice is more calm passionate. She think in terms of the distribution of outcomes, she proposes the price split point. In financial markets, she is known to be a <em>maker</em> - a person who makes markets for a given asset.
+Bob is reactive to the offered price, he will somewhat randomly accept or reject the bet. He may have strong beliefs about the probability of heads of that particular coin, he follows his intuition. Either one can skip the round. If a coin lands heads, Alice wins the $1 pot, otherwise Bob wins it. This is a clear zero-sum game - the winner takes all.</p>
+
+<p>How should Alice set a price for the flip?
+If the coin were a fair coin with a probability of head is ~50%, then it is obvious to Bob not to accept a price greater than 50 cents for tails. If both of them knew the true probability p of the coin upfront, then Bob should not accept a bet for tails at a price that makes the expected value of his bet negative, i.e. pay more than K* =(1-p). That is what we call a <em>fair</em> game.</p>
+
+<p>But how would they play the weighted coin game where they don’t know the probability p upfront? And more importantly, how can they agree on the split point K. Let’s study the game from both player’s perspective.</p>
+
+<h2 id="expected-value-of-a-single-bet">Expected Value of a Single Bet</h2>
+
+<p>Let’s call the probability of landing heads p.</p>
+
+<p>Let’s call  K the price Alice will pay to contribute to the game. Bob will pay (1-K) respectively.</p>
+
+<p><img src="https://veremin.net/assets/substack-math/b01f2d40922c.png" alt="Outcome, Probability, Alice Profit, Bob Profit; Heads, p, 1-K, -(1-K); Tails, 1-p, -K, K" /></p>
+
+<p>Alice’s expected value is: 
+EV_Alice = p(1 - K) + (1-p)(-K) = p - K</p>
+
+<p>Bob’s expected value is: 
+EV_Bob = (1-p) · K + p · (-(1-K)) = K - p</p>
+
+<p>The edge α in this game is the absolute mispricing between the agreed price and the true probability:</p>
+
+<img src="https://veremin.net/assets/substack-math/f0a5d6d632fb.png" alt="\alpha = | K - p |= |\text{price paid} - \text{actual probability}|" />
+
+<p>If Alice’s estimate of the true probability of head p̂ better than the agreed price K, then Alice owns the edge, otherwise, Bob does.</p>
+
+<p>Alice knows several things about the bag of coins:</p>
+<ul>
+  <li>There’re many of them.</li>
+  <li>Her goal is not to be correct on each and every bet, but be profitable <em>in total</em>.</li>
+  <li>Some coins are <em>similar</em> to each other: they have similar size, shape, color, or weight.</li>
+</ul>
+
+<p>Alice decides to place a similar price K for a similar coins, under the core assumption that similar coins have similar underlying probability p.</p>
+
+<p>Let’s say, she observed M different groups. Being statistician, she decides to collect some basic statistics for each group.</p>
+<h2 id="variance-of-a-single-bet">Variance of a Single Bet</h2>
+
+<p>Since she knows that the true probability p can be anywhere in [0,1]</p>
+
+<img src="https://veremin.net/assets/substack-math/b689e04fae35.png" alt="p \sim \text{Uniform(0,1)}" />
+
+<p>She wants to understand how her <em>risk</em> changes across different kind of bets: (1) low-probability of head, (2) fair-ish coins, (3) high-probability head.
+For a head bet at price K her profit X takes values (1-K) with probability p and -K with probability (1-p). Since</p>
+
+<img src="https://veremin.net/assets/substack-math/0a1c2c5a92a9.png" alt="X = Y - K" />
+
+<img src="https://veremin.net/assets/substack-math/61ff8ab60331.png" alt="Y \sim \text{Bernoulli}(p)" />
+
+<p>the price K drops out of the variance equation:</p>
+
+<img src="https://veremin.net/assets/substack-math/8b60e798dca6.png" alt="\text{Var}(X) = \text{Var}(Y - K) = \text{Var}(Y) = p(1-p)" />
+
+<p><img src="https://veremin.net/assets/substack-math/b50d8cbb6c35.png" alt="Region, K, p, σ = \sqrt{p(1-p)}; Longshots, 0.10, 0.07, 0.26; Mid-range, 0.50, 0.47, 0.50; Favorites, 0.90, 0.93, 0.26" /></p>
+
+<p>Variance peaks at p ≈ 0.5 and is lowest in the tails. Alice knows that she takes different risk for different types of coins - risk is almost twice as large near K~0.5 compare with the low/high ends of the range.</p>
+
+<p><img alt="Single-bet variance across price regions" src="https://veremin.net/assets/2026/06/pasted-image-20260530231737.png" /></p>
+
+<p>Alice decide to follow the strategy:</p>
+<ol>
+  <li>For the first Ñ bets, she’ll doesn’t participate in the market, only observe outcomes for each coin, grouped in M groups</li>
+  <li>Then, for each group, she computes empirical hit rate:</li>
+</ol>
+
+<img src="https://veremin.net/assets/substack-math/890a5f9b9ba2.png" alt="\widehat{p_m} = \frac{\sum{X_m}}{N_m}" />
+
+<ol>
+  <li>She selects only groups where pₘ̂ is around 0.1 or 0.9, to minimize the payoff variance.</li>
+</ol>
+
+<p>So what would be the realized payoff for Alice?</p>
+<h2 id="realization-uncertainty">Realization Uncertainty</h2>
+
+<p>Both Alice and Bob want to get away with positive PnL. Bob decides he’ll bet aggressively and double down each time he loses so that the next bet will recover his PnL entirely. 
+Alice adopts a different approach, she prefers steady but high probable cashflow, she thinks about this game more like a business rather than a gamble. 
+For that to happen, she wants to have an answer for the following an important question:</p>
+
+<blockquote>
+  <p>Given the estimated probability pₘ̂ and edge α= pₘ̂ - K, how many bets Nₘ does Alice need to place to have a high likelihood that her payoff will be positive?</p>
+</blockquote>
+
+<p>With N independent bets, the Central Limit Theorem gives us the approximation of the average payoff:</p>
+
+<img src="https://veremin.net/assets/substack-math/3bca49b94f95.png" alt="\bar{X}_M \sim \mathcal{N}\left(\mu_M, \frac{\sigma^2}{N_{\text{M}}}\right)" />
+
+<p>Where σ/(√(N_M)) is the Standard Error SE of the payoff mean. For Alice, the profitability condition for her game is that the lower bound of CI &gt; 0:</p>
+
+<img src="https://veremin.net/assets/substack-math/a2bd4d80500e.png" alt="\mu - z_\alpha \cdot \frac{\sigma}{\sqrt{N_M}} &gt; 0" />
+
+<p>Solving for the minimum number of bets:</p>
+
+<img src="https://veremin.net/assets/substack-math/7a93665318c9.png" alt="N_{\text{M}} &gt; \left(\frac{z_\alpha \cdot \sigma}{\mu_M}\right)^2" />
+
+<p>Alice can use the formula above to determine how many bets she needs to place at a given edge α to lock the positive payoff.</p>
+
+<p>For example, suppose Alice estimates she has an edge of α=3% for a high-likelihood low-risk coin (e.g. she places a bet price K=0.87 at the estimated p̂=90%).
+Then:</p>
+
+<img src="https://veremin.net/assets/substack-math/dc644e1e5f66.png" alt="\mu=\widehat{p}-K=0.03" />
+
+<p>and if, using the lookup from the table above:</p>
+
+<p>σ ≈ 0.26
+For Alice, to achieve profitability with 95% (z_α ≈ 1.96) confidence she needs to make at least:</p>
+
+<img src="https://veremin.net/assets/substack-math/a79dab358329.png" alt="N &gt; \left(\frac{1.96 \times 0.26}{0.03}\right)^2 \approx 289 \text{ bets}" />
+
+<p>To make the lower confidence bound of her PnL positive.</p>
+
+<p>Below is the graph showing the relationship between min number of bets N as a function of μ:</p>
+
+<p><img alt="Minimum bets N as a function of edge" src="https://veremin.net/assets/2026/06/pasted-image-20260531124627.png" /></p>
+
+<p>She can even plot a surface showing how is the minimum number of bets needed varies in  different price segments and edge buckets.</p>
+
+<p><img alt="Minimum-bets surface across price and edge buckets" src="https://veremin.net/assets/2026/06/pasted-image-20260530234413.png" /></p>
+
+<p>The dN/dK price slope of this curve tells us how many more bets Alice need to make for a given change in the price. 
+The dN/dα tells us how many fewer bets Alice needs to make for a step in the realized edge.</p>
+
+<h2 id="calibration-curve">Calibration Curve</h2>
+
+<p>As Alice observes realized outcomes, she can track:</p>
+<ol>
+  <li>What was the expected hit rate for a given group of coins.</li>
+  <li>What was the actual hit rate.</li>
+  <li>How often Bob was willing to accept her bet price (since we’re not completely sure that Bob doesn’t keep record of the hit rate on his own)</li>
+</ol>
+
+<p>Then, Alice can plot the price Bob accepted to pay against the historical hit rate.:
+<img alt="Calibration curve: accepted price vs historical hit rate" src="https://veremin.net/assets/2026/06/pasted-image-20260530234803.png" /></p>
+
+<p>This curve is sometime referred as a <em>calibration curve</em> that measures how well the market-implied probability reflect the historical hit rate.
+In derivatives markets, option pricing models use a similar concept when comparing implied volatility against realized volatility.</p>
+
+<p>To get a little bit more practical here, the <em>calibration curve</em> gives a good leans on how prediction markets get priced. One can construct the curve by market category and study how well the market is calibrated. Perhaps, one can figure out a trading strategy based on that.</p>
+
+<p>Here’s an example of the calibration curve of Polymarket prices split by category:</p>
+
+<p><img alt="Polymarket calibration curve by category" src="https://veremin.net/assets/2026/06/pasted-image-20260531124955.png" /></p>
+
+<h2 id="maker-vs-taker">Maker vs Taker</h2>
+
+<p>We can study how simulated PnL of Alice and Bob evolves though time: 
+<img alt="Simulated maker vs taker PnL over time" src="https://veremin.net/assets/2026/06/pasted-image-20260530235223.png" /></p>
+
+<p>We can clearly see that starting at the same initial balance, Bob slowly but surely drains his bankroll whereas Alice slowly builds it up.
+In most of known markets uninformed, unsophisticated takers will drain their bankroll to makers. Their core difference is that they optimize different objectives:</p>
+
+<p>Maker Alice optimize her cumulative PnL:</p>
+
+<img src="https://veremin.net/assets/substack-math/e2c4f666ef55.png" alt="\max_{\mathcal{B}} \; \mathbb{E}[\Pi_T]" />
+
+<p>Where:
+Π_T=Σₜ₌₁ᵀ Xₜ</p>
+
+<p>Alice only accepts bet groups ℬ where the lower confidence bound is positive:</p>
+
+<img src="https://veremin.net/assets/substack-math/417d299dc457.png" alt="\mu_m-z_\alpha\frac{\sigma_m}{\sqrt{N_m}}&gt;0" />
+
+<p>So her objective becomes:</p>
+
+<img src="https://veremin.net/assets/substack-math/a731331034ee.png" alt="\max_{\mathcal{B}} \sum_{m \in \mathcal{B}} N_m \mu_m \quad \text{s.t.} \quad \mu_m-z_\alpha\frac{\sigma_m}{\sqrt{N_m}}&gt;0" />
+
+<p>Reactive taker Bob doesn’t apply any formal objective, so his behavior is random and governed by the volatility of his bets and his long-term survival is only possible, if the Alice systematically misprice her bets. 
+In more realistic game, when players can set the size of the bet, as Bob accumulates losses, and start making impulsive, emotional judgments, he risks pushing himself to apply the martingale strategy to quickly recover losses. Unfortunately to him, this strategy is known to achieve gambler’s ruin under the finite bankroll with probability approaches 1.</p>
+
+<p>For Alice, the more she in the market, the more the Law of Large Numbers (LoLN) materialize her edge. As we have seen earlier - more bets mean tighter confidence interval for her that eventually locks the positive pay-off.
+For Bob, the more he’s in the market, the greater the chance he’ll deplete his bankroll. The best possible strategy for Bob is to step away from the table when he got lucky and hit a positive streak.</p>
+<h2 id="conclusion">Conclusion</h2>
+
+<p>The coin flip is just a hypothetical example, but estimation of the contract price on the prediction markets like Polymarket or Kalshi is not. This post gave a simplified example how one can use a basic statistics to study the price structure of the prediction markets. This approach can set a base for more sophisticated analysis needed for institutional strategies like basket trading or market making.</p>
+
+<p>In the next post, we’ll go deeper and discuss how can one can incorporate uncertainty of the probability estimate p̂, adjust the Effective Sample Size Under Correlation, and apply Kelly Criterion with Portfolio Weight Constraint.</p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>

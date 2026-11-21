@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Vova’s Blog</title>
+    <link>https://veremin.net/</link>
+    <description>I write about machine learning and finance</description>
+    <item>
+      <title>Chapter 2: Permutations and Symmetry</title>
+      <link>https://veremin.net/chapter-2-permutations-and-symmetry-2/</link>
+      <guid isPermaLink="true">https://veremin.net/chapter-2-permutations-and-symmetry-2/</guid>
+      <pubDate>Wed, 06 Dec 2023 11:08:07 +0000</pubDate>
+      <description><![CDATA[In the first chapter , we embarked on an exploratory journey into the world of stochastic calculus, starting with the basic yet profound concept of the random walk. We began by demystifying the complexity of probability theory, revealing its inherent beauty and simplicity…]]></description>
+      <content:encoded><![CDATA[<p><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd"><br />
+<!-- wp:paragraph --><html><body></p>
+<p>In the <a href="https://veremin.net/chapter-1-introduction-to-random-walk-2/">first chapter</a>, we embarked on an exploratory journey into the world of stochastic calculus, starting with the basic yet profound concept of the random walk. We began by demystifying the complexity of probability theory, revealing its inherent beauty and simplicity through the lens of discrete-time random walks. We delved into the fundamental principles of probability, using the concept of a 'fair coin' to introduce the Binomial distribution and its application in modeling random walks. This foundation sets the stage for a deeper exploration into the mathematical intricacies of random walks.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>By now, we can derive some mathematical representations of the random walk. We can start with the most simple one, an equation for a forward path:<br /> <img src="https://veremin.net/assets/substack-math/d170803d5971.png" alt="S_n = X_0 + X_1 + \cdots + X_n" /><br /> Where:<br /> <img src="https://veremin.net/assets/substack-math/c6eaac0b7821.png" alt="X = \begin{cases} +1 &amp;\text{with probability} \frac{1}{2}, \\  -1 &amp; \text{with probability} \frac{1}{2},  \end{cases}" /></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, let's think about what we have here:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>Sₙ: is a number that represent a position after n steps;</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Xₙ: is a series of random variables, a single realization of the trajectory that leads to the Sₙ.</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Since  X₀, X₁, ⋯ , Xₙ are <em>iid</em> (independent and identically distributed), let's do a trick and rearrange some elements in the series a little bit:<br /> We swap each even element with an odd:<br /> X₀ , X₁ , X₂, X₃ ,⋯ ⇾ X₁ , X₀ , X₃, X₂ ,⋯<br />Note, that the  sum of each of the series is still Sₙ, since values are the same, but what changed is the <em>trajectory</em> by which we got to the Sₙ. We can illustrate it by plotting an original and new trajectory:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":384,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-384" src="https://veremin.net/assets/2023/12/Pasted-image-20231205160823.png" /></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>The symmetry in these trajectories is notably striking. It begs the question, 'Are there additional trajectories that would similarly lead to the same Sₙ destination?</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Here's another example where all possible trajectories leading to the point Sₙ is plotted:<br /></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:image {"id":385,"sizeSlug":"full","linkDestination":"none"} --></p>
+<figure class="wp-block-image size-full"><img alt="" class="wp-image-385" src="https://veremin.net/assets/2023/12/Pasted-image-20231205160850.png" /></figure>
+<p><!-- /wp:image --></p>
+<p><!-- wp:paragraph --></p>
+<p>Interestingly, we can count precisely the number of trajectories that lead to Sₙ from the origin, bear with me:<br /> If we forget about time axis for a second and consider only a position axis (y-axis), then we can express the position Sₙ after n steps as a function of two variables:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li># of steps forward (positive direction), let's call it k</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li># of steps backwards (negative direction), it'll be n-k</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Sₙ= m = k - (n-k) </p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Solving for k, we get:<br /> k = (m+n)/2</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, you can see that to end up m steps away from the origin, you need to take (m+n)/2​ steps forward, and the rest backward.<br /> Since we're looking for all possible combinations (ways of write down #k +1s and #(n-k) -1s), we can use the binomial coefficient:<br /> <img src="https://veremin.net/assets/substack-math/0cb914f4e5db.png" alt="\text{# of trajectories}={n  \choose k}={n  \choose \frac{m+n}{2}}" /><br /> For example, we can find that after 10 steps (n=10) the number of paths lead to point m=2 is exactly <img src="https://veremin.net/assets/substack-math/186477ab9d61.png" alt="{10 \choose \frac{10+2}{2}=6 }= 210" /></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Even though the number of trajectories gives us a clue about the likelihood of ending up exactly m steps from the origin, it's still challenging to compare different outcomes. This difficulty arises because the number of trajectories increases with n. We need a factor that is also a function of n, but in the opposite way, so that the measure of likelihood be in the same scale disregard of the n.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Let's start by rearranging back all trajectories {S}ₙ that results at m by sorting by outcome:</p>
+<p><img src="https://veremin.net/assets/substack-math/d1bec7101fa8.png" alt="S_{n,i} = X_0 + X_1 + \cdots + X_n \;\Rightarrow" /></p>
+<p><img src="https://veremin.net/assets/substack-math/168d4ae5914f.png" alt="\Rightarrow S_n^{\text{sorted}} = \text{sort}(S_{n,i})= X_0^{+} + X_1^{+} + \cdots + X_k^{+} \cdots X_0^{-} + X_1^{-} + \cdots + X_{n-k}^{-}" /></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>Sₙ,ᵢ represents a specific permutation of the random walk after n steps. </li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>Sₙˢᵒʳᵗᵉᵈ​ reflects the sorted, common form of any permutation  of Sₙ</li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>Now, let's answer the question "How likely you can see a row of [X⁺=+1] k times in the row followed by a series of [X⁻=-1] (n-k) times straight".<br /> Since we're dealing with a symmetric random walk and P(X⁺)= P(X⁻)=1/2, it'll be:<br /> <img src="https://veremin.net/assets/substack-math/34fc11c9ba02.png" alt="(\frac{1}{2})^k \times (\frac{1}{2})^{n-k}=(\frac{1}{2})^{n}" /><br />You can see that this scaling factor is exactly what we're looking for since it scales down with  n balancing out our combinatorial part.  By putting it all together, we can finally derive the Probability Mass Function (PMF) for a simply symmetric random walk:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p><img src="https://veremin.net/assets/substack-math/1eed17dae4bc.png" alt="P(m|n) = {n  \choose k}p^{n-k}(1-p)^k={n  \choose \frac{m+n}{2}}p^n" /></p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>NOTE: for a non-symmetric (drift) random walk , the P(X⁺)≠ P(X⁻) and hence we should use the full form.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>Finally, let's return once again to the property of time symmetry that I mentioned in the beginning. We can now postulate it from the PMF quite easily:</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:list --></p>
+<ul>
+<!-- wp:list-item --></p>
+<li>Since we're using a desperate step of X=±1, Sₙ should be one step away (either below or above) Sₙ₋₁ and</li>
+<p><!-- /wp:list-item --></p>
+<p><!-- wp:list-item --></p>
+<li>the position Sₜ depends only on the position Sₜ₋₁<br /> Given that, we can derive the PMF for Sₙ as a function of PMF  of Sₙ₋₁: <br /> <img src="https://veremin.net/assets/substack-math/eafdd8b4befc.png" alt="P(m|n)= \frac{1}{2} P(m-1 | n-1) +\frac{1}{2}P(m+1|n-1)" /></li>
+<p><!-- /wp:list-item -->
+</ul>
+<p><!-- /wp:list --></p>
+<p><!-- wp:paragraph --></p>
+<p>The symmetric random walk, despite its seemingly simple nature, is a fundamental model with far-reaching implications and applications. This model serves as a cornerstone in understanding and analyzing complex phenomena across various disciplines including physical, biological, finance, and other systems where even a straightforward mathematical concept can offer profound insights into the complexities of a system.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:paragraph --></p>
+<p>The versatility of a symmetric random walk allows for modifications and adaptations that can tackle more specific and complex scenarios. For instance, introducing asymmetry or additional constraints can simulate more realistic conditions in various fields.<br /> Its ability to model a wide range of real-world systems underlines the importance of probabilistic thinking and statistical principles in understanding our world.</p>
+<p><!-- /wp:paragraph --></p>
+<p><!-- wp:shortcode --><br />
+<!-- /wp:shortcode --><br />
+</body></html></p>]]></content:encoded>
+    </item>
+  </channel>
+</rss>

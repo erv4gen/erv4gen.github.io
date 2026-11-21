@@ -14,9 +14,11 @@ Substack's importer has no math support, so:
 usage (from the repo root):
   cd _tools/substack && npm install && cd ../..
   uv run _tools/substack/build_feed.py
-Then commit substack.xml and the assets/substack-math/ folder, and push.
+Then commit substack.xml, the substack-feeds/ and assets/substack-math/ folders, and push.
 In Substack, open Settings > Import/Export > Import posts and paste the feed URL:
 https://veremin.net/substack.xml
+To import one post at a time, paste its own feed instead:
+https://veremin.net/substack-feeds/<slug>.xml (one file per post, same content)
 """
 import hashlib
 import html
@@ -36,6 +38,7 @@ OLD_SITE = "https://erv4gen.github.io"
 REPO = Path(__file__).resolve().parents[2]
 MATH_DIR = REPO / "assets" / "substack-math"
 OUT = REPO / "substack.xml"
+PER_POST = REPO / "substack-feeds"  # one feed per post, to import posts one at a time
 # posts left out of the Substack import, by their veremin.net URL
 EXCLUDE = {
     f"{SITE}/my-experiments-with-an-ai-assistant-or-how-not-to-search-for-shows-in-nyc/",
@@ -269,7 +272,7 @@ def main():
     feed = feedparser.parse(httpx.get(f"{SITE}/feed.xml", follow_redirects=True).text, sanitize_html=False)
     conv, dropped = Converter(), []
     client = httpx.Client(follow_redirects=True, timeout=30)
-    items = []
+    items = []  # (slug, <item> xml)
     for e in feed.entries:
         link = e.link.replace(OLD_SITE, SITE)
         if link in EXCLUDE:
@@ -278,14 +281,15 @@ def main():
         body = conv.content(body, e.title)
         body = drop_dead_images(body, client, e.title, dropped)
         published = datetime(*e.published_parsed[:6], tzinfo=timezone.utc)
-        items.append(f"""    <item>
+        slug = link.rstrip("/").rsplit("/", 1)[-1].removesuffix(".html")
+        items.append((slug, f"""    <item>
       <title>{html.escape(e.title)}</title>
       <link>{link}</link>
       <guid isPermaLink="true">{link}</guid>
       <pubDate>{format_datetime(published)}</pubDate>
       <description>{cdata(excerpt(body))}</description>
       <content:encoded>{cdata(body)}</content:encoded>
-    </item>""")
+    </item>"""))
 
     MATH_DIR.mkdir(parents=True, exist_ok=True)
     todo = [j for j in conv.jobs.values() if not Path(j["out"]).exists()]
@@ -297,19 +301,30 @@ def main():
     if missing:
         sys.exit(f"{len(missing)} display equations failed to render; substack.xml not written")
 
-    OUT.write_text(f"""<?xml version="1.0" encoding="UTF-8"?>
+    def rss(xml_items):
+        return f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>{html.escape(feed.feed.title)}</title>
     <link>{SITE}/</link>
     <description>{html.escape(feed.feed.get("subtitle", ""))}</description>
-{chr(10).join(items)}
+{chr(10).join(xml_items)}
   </channel>
 </rss>
-""")
+"""
+
+    OUT.write_text(rss([x for _, x in items]))
+    PER_POST.mkdir(exist_ok=True)
+    for old in PER_POST.glob("*.xml"):
+        old.unlink()
+    for slug, x in items:
+        (PER_POST / f"{slug}.xml").write_text(rss([x]))
     print(f"wrote {OUT.relative_to(REPO)}: {len(items)} posts, "
           f"{conv.display_count} display equations ({len(conv.jobs)} unique images), "
           f"{conv.inline_count} inline expressions")
+    print(f"wrote {PER_POST.relative_to(REPO)}/: one feed per post")
+    for slug, _ in items:
+        print(f"  {SITE}/{PER_POST.name}/{slug}.xml")
     if dropped:
         print(f"\ndropped {len(dropped)} dead images:")
         for post, src in dropped:

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Vova’s Blog</title>
+    <link>https://veremin.net/</link>
+    <description>I write about machine learning and finance</description>
+    <item>
+      <title>Orders of Magnitude of Probabilities</title>
+      <link>https://veremin.net/finance/2026/06/20/scale-of-different-probabilities.html</link>
+      <guid isPermaLink="true">https://veremin.net/finance/2026/06/20/scale-of-different-probabilities.html</guid>
+      <pubDate>Sat, 20 Jun 2026 00:00:00 +0000</pubDate>
+      <description><![CDATA[Introduction We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are familiar , meaning they are common enough that we don’t bother to notice them. We rarely see unfamiliar events; they are usually rare (for us). This is why…]]></description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>We, humans, live in the world of common events. The majority of events we observe on a day-to-day basis are <em>familiar</em>, meaning they are common enough that we don’t bother to notice them. We rarely see <em>unfamiliar</em> events; they are usually rare (for us). This is why humans are bad at distinguishing different orders of rarity. Not all “unlikely” things are the same.<br />
+More often than not, I hear people say “it’s a rare event” or “this is unlikely”. We’d casually drop something like “one in a <em>million</em>” or “one in a <em>billion</em>” chance. We use these terms interchangeably and usually don’t give it much thought to how different these scales are.<br />
+This is the qualitative step between the two. Each additional zero represents a very different regime. Science calls it <em>orders of magnitude</em>.</p>
+
+<p>In this post, I want to show how different rare events are. In fact, they’re very different.<br />
+We’ll climb through the orders of magnitude from something that is quite common, like 1 in 10, to rare events, like 1 in 1,000 and 1 in 100,000, and demonstrate that they are, in fact, quite different.</p>
+
+<p>NOTE: Some examples that will be presented below are not exact probabilities; they’re accurate to the order of magnitude and for the peg reference only. For more precise poker probabilities, use  <a href="https://www.pokernews.com/poker-hands/probabilities.htm#idSJwoOiiCB-">reference table</a> .</p>
+
+<h3 id="common-everyday-frequencies">Common Everyday Frequencies</h3>
+
+<h4 id="1-in-2">1 in 2</h4>
+<p>Our starting point.</p>
+
+<ul>
+  <li>50% probability</li>
+  <li>Coin Flip</li>
+</ul>
+
+<h4 id="1-in-3">1 in 3</h4>
+<ul>
+  <li>33% probability</li>
+  <li>Someone in your immediate family</li>
+</ul>
+
+<h4 id="1-in-5">1 in 5</h4>
+<ul>
+  <li>20% probability</li>
+  <li>Roughly the odds of a high-card hand in poker</li>
+  <li>A random person having blue eyes</li>
+</ul>
+
+<h4 id="1-in-10">1 in 10</h4>
+<ul>
+  <li>10% probability</li>
+  <li>A person in the meeting or friend group</li>
+  <li>Event happens every couple of weeks</li>
+  <li>Being left-handed</li>
+</ul>
+
+<h4 id="1-in-20">1 in 20</h4>
+<ul>
+  <li>5% probability</li>
+  <li>Three-of-a-kind, straight in poker</li>
+  <li>The p &lt; 0.05 significance threshold in science</li>
+  <li>4–5 heads in a row</li>
+</ul>
+
+<h4 id="1-in-50">1 in 50</h4>
+<ul>
+  <li>2% probability</li>
+  <li>Event happens every couple of months</li>
+  <li>Full house in poker</li>
+  <li>A single birth being twins</li>
+  <li>6 heads in a row</li>
+</ul>
+
+<figure style="margin:2rem auto;text-align:center">
+  <img alt="A stack of cards growing from 1 in 10 to a full 52-card deck" src="https://veremin.net/assets/2026/06/01-ten-to-deck.gif" style="width:100%;max-width:640px;height:auto;border-radius:6px" />
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A stack of a 52-card deck.</figcaption>
+</figure>
+
+<h3 id="occasional-periodic-frequencies">Occasional Periodic Frequencies</h3>
+<h4 id="1-in-100">1 in 100</h4>
+<ul>
+  <li>1% probability</li>
+  <li>Large lecture hall or company</li>
+  <li>Event happens a few times a year</li>
+  <li>7 heads in a row</li>
+</ul>
+
+<h4 id="1-in-500">1 in 500</h4>
+<ul>
+  <li>0.2% probability</li>
+  <li>Event happens once a year</li>
+  <li>Four-of-a-kind hand in poker</li>
+</ul>
+
+<h4 id="1-in-1000">1 in 1,000</h4>
+<ul>
+  <li>0.1% probability</li>
+  <li>Your small town neighborhood</li>
+  <li>Happens once in a few years</li>
+  <li>10 heads in a row</li>
+</ul>
+
+<figure style="margin:2rem auto;text-align:center">
+  <img alt="The card stack growing from one deck to a school-ruler-tall tower at 1 in 1,000" src="https://veremin.net/assets/2026/06/02-deck-to-thousand.gif" style="width:100%;max-width:640px;height:auto;border-radius:6px" />
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A pile of cards.</figcaption>
+</figure>
+
+<h3 id="rare-and-unlikely-frequencies">Rare and Unlikely Frequencies</h3>
+
+<h4 id="1-in-10000">1 in 10,000</h4>
+<ul>
+  <li>0.01% probability</li>
+  <li>Someone in a town</li>
+  <li>Several times in lifetime</li>
+  <li>Guessing a 4-digit PIN on the first try</li>
+  <li>A lifetime chance of being struck by lightning</li>
+</ul>
+
+<h4 id="1-in-100000">1 in 100,000</h4>
+<ul>
+  <li>0.001% probability</li>
+  <li>Someone in small city</li>
+  <li>Once in the several lifetimes</li>
+  <li>Being dealt a royal flush</li>
+</ul>
+
+<h4 id="1-in-1000000">1 in 1,000,000</h4>
+<ul>
+  <li>0.0001%</li>
+  <li>Someone in big city</li>
+  <li>Once in several millennia</li>
+  <li>20 heads in a row</li>
+</ul>
+
+<figure style="margin:2rem auto;text-align:center">
+  <img alt="The card tower climbing past people and buildings to the Eiffel Tower, from 1 in 1,000 to 1 in 1,000,000" src="https://veremin.net/assets/2026/06/03-thousand-to-million.gif" style="width:100%;max-width:640px;height:auto;border-radius:6px" />
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A building of cards</figcaption>
+</figure>
+
+<p>Beyond this point lie probabilities so small that such an event wouldn’t yet have occurred in the recorded history of human civilization, and would instead be measured in terms of geological epochs.</p>
+
+<h3 id="almost-impossible-frequencies">Almost Impossible Frequencies</h3>
+
+<h4 id="1-in-10000000">1 in 10,000,000</h4>
+<ul>
+  <li>0.00001%</li>
+  <li>Someone in metro area</li>
+  <li>Milankovitch geological cycle (Once every ~41k years)</li>
+</ul>
+
+<h4 id="1-in-100000000">1 in 100,000,000</h4>
+<ul>
+  <li>0.000001%</li>
+  <li>Someone in the nation/country</li>
+  <li>About the odds of winning a national lottery jackpot</li>
+  <li>Orbital eccentricity cycles (Once every ~400k years)</li>
+</ul>
+
+<figure style="margin:2rem auto;text-align:center">
+  <img alt="The card tower rising into the stratosphere from 1 in 1,000,000 to 1 in 100,000,000, about 30 km tall" src="https://veremin.net/assets/2026/06/04-million-to-hundredmillion.gif" style="width:100%;max-width:640px;height:auto;border-radius:6px" />
+  <figcaption style="font-size:0.9em;color:#666;margin-top:0.4rem">A mountain of cards</figcaption>
+</figure>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This post is intended to show the difference between orders of magnitude and provide intuitive, visual support for each level. It suggests that orders of magnitude are a useful mental model for thinking about too-big or too-small numbers.</p>
+
+<p>Our intuition evolved to reason about the events we are familiar with, events we encounter regularly. Our brains are, in fact, quite good at probabilistic thinking. I agree with <a href="https://www.youtube.com/watch?v=R13BD8qKeTg">Derek</a> that we’re intuitively good at Bayesian estimation. But once probabilities become sufficiently small, that intuition begins to fail. We don’t have enough real-life encounters with one-in-a-thousand or one-in-a-million events to form a strong intuition.</p>
+
+<p>That’s why we should think in orders of magnitude rather than plain numbers for very large or very small numbers, to help us replace loose ideas like “unlikely” or “rare” with a more precise mental model. This mental model is particularly strong when you need to judge probabilistic systems: poker hands, medical risks, and financial crises. Judging in orders of magnitude leads to better intuition and better decisions.</p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>Left-handedness, Papadatou-Pastou et al. - <a href="https://www.psychologytoday.com/us/blog/the-asymmetric-brain/202004/the-worlds-biggest-study-on-left-handedness">Psychology Today, “The World’s Biggest Study on Left-Handedness”</a></li>
+  <li>Blue eyes — <a href="https://www.medicalnewstoday.com/articles/eye-color-percentage">Medical News Today, “Eye colors: Most common and percentages”</a></li>
+  <li>Fisher’s original convention significance threshol - <a href="https://en.wikipedia.org/wiki/P-value">Wikipedia, “p-value”</a>; background: <a href="http://www.jerrydallal.com/lhsp/p05.htm">Dallal, “Why P=0.05?”</a></li>
+  <li>Poker hand probabilities — <a href="https://www.pokernews.com/poker-hands/probabilities.htm">PokerNews, “Poker Hand Probabilities”</a></li>
+  <li>Twin births — <a href="https://www.cdc.gov/nchs/fastats/multiple.htm">CDC/NCHS FastStats, “Multiple Births”</a></li>
+  <li>Odds of being struck by lightning — <a href="https://www.weather.gov/safety/lightning-odds">NOAA National Weather Service, “How Dangerous is Lightning?”</a></li>
+  <li>National lottery jackpot odds - <a href="https://www.thelotter.us/mega-millions/odds/">Mega Millions odds</a>; <a href="https://www.euro-millions.com/odds-of-winning">EuroMillions odds</a></li>
+  <li>Milankovitch / orbital cycles — <a href="https://science.nasa.gov/science-research/earth-science/milankovitch-orbital-cycles-and-their-role-in-earths-climate/">NASA Science, “Milankovitch (Orbital) Cycles and Their Role in Earth’s Climate”</a></li>
+</ol>]]></content:encoded>
+    </item>
+  </channel>
+</rss>
