@@ -116,22 +116,16 @@ hr.rule {
   min-width: 0;
 }
 
-/* ---- Headings that open a section: home topics, About, tag pages ---- */
+/* ---- Headings that open a section: home topics, About, tag pages, All posts ----
+   One size everywhere, so moving between pages doesn't change the headings. */
 .section-title,
 .page-title {
   margin: 0 0 8px;
   padding-bottom: 4px;
   border-bottom: $rule;
+  font-size: 17px;
   line-height: 27px;
   color: #222;
-}
-
-.section-title {
-  font-size: 17px;
-}
-
-.page-title {
-  font-size: 22px;
 }
 
 .section-title .more,

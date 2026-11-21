@@ -4,7 +4,7 @@ title: All Posts
 permalink: /posts/
 ---
 
-<h2>Topics</h2>
+<h2 class="section-title">Topics</h2>
 
 {%- if site.tags.size > 0 -%}
   <ul>
@@ -18,7 +18,7 @@ permalink: /posts/
   <p>No topics found.</p>
 {%- endif -%}
 
-<h2>All Posts</h2>
+<h2 class="section-title">All Posts</h2>
 
 {%- if site.posts.size > 0 -%}
   <ul>
