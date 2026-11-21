@@ -1,12 +1,6 @@
-<!-- A plain form, not Substack's /embed iframe: Cloudflare sometimes answers the framed
-     request with a challenge page that forbids framing, and the box shows "refused to connect". -->
-<form class="substack-subscribe" action="{{ site.substack_url }}/api/v1/free?nojs=true" method="post" target="_blank"
-      style="display:flex; flex-wrap:wrap; gap:8px; max-width:480px; margin:1em 0;">
-  <input type="email" name="email" required placeholder="Your email address" aria-label="Email address"
-         style="flex:1 1 220px; padding:10px 12px; font:inherit; border:1px solid #ccc; border-radius:4px;">
-  <button type="submit"
-          style="padding:10px 18px; font:inherit; color:#fff; background:#ff6719; border:0; border-radius:4px; cursor:pointer;">
-    Subscribe
-  </button>
-</form>
+<!-- Substack's own embed, transparent so the page's paper background shows through.
+     If it ever shows "refused to connect", the link below still works. -->
+<iframe src="{{ site.substack_url }}/embed?transparent=1&light=1" width="480" height="320"
+        style="border: 0; background: transparent; max-width: 100%;"
+        frameborder="0" scrolling="no" title="Subscribe on Substack"></iframe>
 <p style="font-size:0.9em;">Or read and subscribe on <a href="{{ site.substack_url }}">Substack</a>.</p>
