@@ -6,7 +6,7 @@ layout: default
   in tag/ (layout: archive-tag, tag: <name>, permalink: /tag/<slug>/).
 {%- endcomment -%}
 {%- assign tag_posts = site.tags[page.tag] | default: page.posts -%}
-<h2 class="page-title">{{ page.tag | default: page.title | capitalize | escape }} <span class="more">{{ tag_posts.size }} {% if tag_posts.size == 1 %}post{% else %}posts{% endif %}</span></h2>
+<h2 class="section-title">{{ page.tag | default: page.title | capitalize | escape }} <span class="more">{{ tag_posts.size }} {% if tag_posts.size == 1 %}post{% else %}posts{% endif %}</span></h2>
 {%- if tag_posts.size > 0 %}
 <ul class="post-list full">
   {%- for post in tag_posts %}
