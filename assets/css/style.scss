@@ -39,8 +39,8 @@ li::marker {
 
 /* ---- Page frame (see _layouts/default.html) ---- */
 /* Sidebar with title, tagline and menu; one content column next to it.
-   Section lines are dashed, like a typewritten page. */
-$rule: 1px dashed #CFC8BA;
+   Section lines are thin solid rules. */
+$rule: 1px solid #E8E4DC;
 
 .site {
   max-width: 1080px;
