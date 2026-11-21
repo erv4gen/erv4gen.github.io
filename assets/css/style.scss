@@ -153,9 +153,8 @@ ul.post-list .date {
   color: #666;
 }
 
-/* Tag pages list every post, so the titles get a little more room. */
+/* Tag pages list every post. Same text size as the home page lists, so
+   opening a topic doesn't change how the titles look. */
 ul.post-list.full {
   margin-bottom: 32px;
-  font-size: 17.5px;
-  line-height: 1.75;
 }
