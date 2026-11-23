@@ -17,12 +17,10 @@ author:
 ## About
 {: .page-title}
 
-Hi, I’m Vladimir, a senior data scientist with a blend of quant finance and tech background.
-Welcome to my blog, where I share stories hidden behind data. Here, I explore the realms of data science, quantitative finance, and problem-solving.
-This blog has started as my offline journal and at some point I decided to start publishing it in the hope it may be helpful for others as well.
-Please look around if something catches your eye. Feel free to reach out to me if you have questions or suggestions.
+Hi and welcome to my blog. 
+I’m Vladimir, I work as a risk quant with prior experience doing machine learning in tech and finance. This blog mostly covers these topics around finance and AI, as well as my thoughts on other topics.
 
-Additionally, for those of you in NYC, I co-host a data science meetup - if you're around, I'll be happy to meet you at our next event!
+If you live in NYC and like machine learning/DS, I host a [meetup group](https://www.meetup.com/new-york-ai-ml-conversations/), I'll be happy to meet you at our next event!
 
 ### Social Links
 {: .section-title}
